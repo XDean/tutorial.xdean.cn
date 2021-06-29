@@ -16,7 +16,7 @@ export const meta = {
 
 这时，我们就需要使用`useEffect`。请看下面的例子
 
-<SrcReactEditor js={'/code/effect.jsx'}/>
+<SrcReactEditor js={'/react/code/effect.jsx'}/>
 
 按下<kbd>F12</kbd>，然后操作新的计数器，可以看到我们打出的log信息。
 
@@ -30,7 +30,7 @@ export const meta = {
 
 理所当然的，我们添加了一个新的状态`big`。结果如下
 
-<SrcReactEditor js={'/code/effect2.jsx'}/>
+<SrcReactEditor js={'/react/code/effect2.jsx'}/>
 
 看上去不错！但是，如果你仔细观察控制台，你会发现，在我们toggle字体大小的时候，也会打印log信息。这些冗余信息与我们的期望不符。
 
@@ -73,7 +73,7 @@ React.useEffect(() => {
 
 这在`useEffect`里非常简单，只需要在副作用函数里返回清除函数，清除函数会在该次渲染失效时执行
 
-<SrcReactEditor js={'/code/effect3.jsx'}/>
+<SrcReactEditor js={'/react/code/effect3.jsx'}/>
 
 现在，再次疯狂点击按钮，只有在你停下后，才会发送事件给服务器。
 

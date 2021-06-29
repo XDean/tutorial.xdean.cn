@@ -36,7 +36,7 @@ clear.onclick = () => text.value = ''
 
 更多的时候，我们会采用受控组件的形式，来自己控制组件的。
 
-<SrcReactEditor js={'/code/controlled.jsx'}/>
+<SrcReactEditor js={'/react/code/controlled.jsx'}/>
 
 我们设置了`input`的`value`属性为`content`，所以当`content`变化时，`input`的值也会改变。
 
@@ -53,19 +53,19 @@ clear.onclick = () => text.value = ''
 
 考虑现在我们有一个温度输入的组件，可以选择单位是摄氏度或者华氏度。
 
-<SrcReactEditor js={'/code/controlled2.jsx'}/>
+<SrcReactEditor js={'/react/code/controlled2.jsx'}/>
 
 现在我们的需求是一个自动温度转换器，
 
 理所当然的，我们在`App`里加入了两个输入框
 
-<SrcReactEditor js={'/code/controlled2-2.jsx'}/>
+<SrcReactEditor js={'/react/code/controlled2-2.jsx'}/>
 
 但是很可惜，两个文本框并没有自动转换，因为它们的状态由自己管理，不受外部控制。
 
 这个时候，我们就需要把组件变成**受控组件**，换句话也可以说把组件的**状态提升**到父组件。
 
-<SrcReactEditor js={'/code/controlled2-3.jsx'}/>
+<SrcReactEditor js={'/react/code/controlled2-3.jsx'}/>
 
 ## 小结
 

@@ -7,13 +7,13 @@ export const meta = {
 
 本节我们将运用所学的知识来制作一个简单的井字棋游戏，最终成品如下
 
-<SrcReactEditor js={'/code/tic-tac-toe.jsx'} css={'/code/tic-tac-toe.css'} hideCode className={'w-6/12'}/>
+<SrcReactEditor js={'/react/code/tic-tac-toe.jsx'} css={'/react/code/tic-tac-toe.css'} hideCode className={'w-6/12'}/>
 
 下面给出了初始代码，在此之上开始你的第一个React项目吧。
 
 (css样式不是我们的关注点，故已经默认提供)
 
-<SrcReactEditor js={'/code/tic-tac-toe-1.jsx'} css={'/code/tic-tac-toe.css'}/>
+<SrcReactEditor js={'/react/code/tic-tac-toe-1.jsx'} css={'/react/code/tic-tac-toe.css'}/>
 
 规则：
 
@@ -33,8 +33,8 @@ export const Answer = () => {
       <Button onClick={() => setShow(e => !e)} text={show ? '隐藏参考示例' : '显示参考示例'}/>
       <SrcReactEditor
         className={show ? '' : 'hidden'}
-        js={'/code/tic-tac-toe.jsx'}
-        css={'/code/tic-tac-toe.css'}/>
+        js={'/react/code/tic-tac-toe.jsx'}
+        css={'/react/code/tic-tac-toe.css'}/>
     </>
   )
 }

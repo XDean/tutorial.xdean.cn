@@ -43,7 +43,7 @@ const Child = () => {
 
 ## 例子
 
-<SrcReactEditor js={'/code/context.jsx'} css={'/code/context.css'}/>
+<SrcReactEditor js={'/react/code/context.jsx'} css={'/react/code/context.css'}/>
 
 我们定义了一个主题上下文，包含了`light`和`dark`两种颜色模式。
 尝试将`ThemeContext.Provider`中的`value`改为`themes.dark`，你将会看到颜色的变化。
@@ -54,7 +54,7 @@ const Child = () => {
 
 这时，我们就需要把上下文的值提升为状态。并且在上下文中加入一个可以切换主题的方法，然后在子节点中就可以调用上下文中的方法来切换主题了。
 
-<SrcReactEditor js={'/code/context2.jsx'} css={'/code/context.css'}/>
+<SrcReactEditor js={'/react/code/context2.jsx'} css={'/react/code/context.css'}/>
 
 ## 其他
 

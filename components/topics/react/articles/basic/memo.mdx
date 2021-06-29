@@ -48,7 +48,7 @@ const Label = React.memo(({text}) => (
 
 但是，许多时候只使用`React.memo`并不能得到预期的效果，请看下面的例子。
 
-<SrcReactEditor js={'/code/memo.jsx'}/>
+<SrcReactEditor js={'/react/code/memo.jsx'}/>
 
 我们使用`React.memo`包装了`Label`组件。打开控制台，你会看到在点击时`<Label data={title}/>`组件依然被调用了。
 原因是，当`App`重新渲染时，`title`对象也是重新创建的，和上一次渲染时已经不是同一个对象，而`React.memo`只会进行浅比较。

@@ -3,9 +3,10 @@ import {GithubComment} from "./util/GithubComment";
 import Link from 'next/link'
 import {VisitorTag} from "./util/VisitorTag";
 import css from './Article.module.css'
-import {ArticleData, ArticleSet} from "./topics/topic";
+import {ArticleData, ArticleSet, Topic} from "./topics/topic";
 
 type Props = {
+  topic: Topic
   articleSet: ArticleSet
   article: ArticleData
 }
@@ -30,12 +31,12 @@ export const Article = (props: Props) => {
         <props.article.Component/>
       </article>
       <div className={'flex flex-row justify-center pb-4 pt-8'}>
-        <Link href={`/article/react/${props.articleSet.id}/${prev?.meta.id}`}>
+        <Link href={`/article/${props.topic.id}/${props.articleSet.id}/${prev?.meta.id}`}>
           <div className={css.navButton}>
             {prev && `上一节：${prev.meta.name}`}
           </div>
         </Link>
-        <Link href={`/article/react/${props.articleSet.id}/${next?.meta.id}`}>
+        <Link href={`/article/${props.topic.id}/${props.articleSet.id}/${next?.meta.id}`}>
           <div className={css.navButton}>
             {next && `下一节：${next.meta.name}`}
           </div>

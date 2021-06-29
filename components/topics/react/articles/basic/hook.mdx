@@ -46,13 +46,13 @@ const App = ({login}) => {
 你是否还记得在上一节，我们已经完成了一个debounce功能。
 现在，我们可以把他提炼为新的`useDebounce`钩子，当我们再需要debounce功能时，就可以很方便地调用自定义钩子了。
 
-<SrcReactEditor js={'/code/hook.jsx'}/>
+<SrcReactEditor js={'/react/code/hook.jsx'}/>
 
 在上一节，我们还留了一个思考题，如何让`useEffect`在第一次渲染时不调用。
 其实只需要结合`useState`和`useEffect`就可以做到这个效果了。
 
 示例如下：
 
-<SrcReactEditor js={'/code/hook2.jsx'}/>
+<SrcReactEditor js={'/react/code/hook2.jsx'}/>
 
 现在，控制台不会在第一次渲染时打印`count:0`了。
