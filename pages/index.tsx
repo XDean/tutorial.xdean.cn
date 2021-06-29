@@ -2,11 +2,18 @@ import {DefaultLayout} from "../components/layout/DefaultLayout";
 import {AllTopics} from "../components/topics/topics";
 import Head from "next/head";
 import Link from 'next/link'
+import {faBook} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default function Index() {
   return (
     <DefaultLayout topbar={{
       title: 'XDean的教程',
+      left:
+        <FontAwesomeIcon
+          title={'回到主页'}
+          icon={faBook}
+          className={'!w-[36px] !h-[36px] mr-2'}/>
     }}>
       <Head>
         <title>XDean的教程</title>
