@@ -3,7 +3,7 @@ import {GithubComment} from "./util/GithubComment";
 import Link from 'next/link'
 import {VisitorTag} from "./util/VisitorTag";
 import css from './Article.module.css'
-import {ArticleData, ArticleSet} from "./topics/react/articles/article";
+import {ArticleData, ArticleSet} from "./topics/topic";
 
 type Props = {
   articleSet: ArticleSet

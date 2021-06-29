@@ -3,13 +3,13 @@ import {useRouter} from 'next/router'
 import {TOC} from "../../../../components/TOC";
 import {useEffect} from "react";
 import {Article} from "../../../../components/Article";
-import {AllArticles} from "../../../../components/topics/react/articles/article";
+import {ReactArticles} from "../../../../components/topics/react/articles/article";
 import Head from 'next/head'
 
 export default function Index() {
   const router = useRouter()
   const {set, id} = router.query
-  const articleSet = AllArticles.find(e => e.id === set) || AllArticles[0]
+  const articleSet = ReactArticles.find(e => e.id === set) || ReactArticles[0]
   const article = articleSet.articles.find(e => e.meta.id === id) || articleSet.articles[0]
   useEffect(() => {
     if (router.isReady && (set !== articleSet.id || id !== article.meta.id)) {

@@ -1,0 +1,114 @@
+import Image from 'next/image'
+import uiImage from '../../../../../public/spark/resources/word_count_ui.png'
+
+export const meta = {
+  id: 'hello-world',
+  name: 'Hello World',
+}
+
+当我们学习一门编程语言时，第一个程序就是`Hello World`。
+
+而在大数据的世界里，最流行的入门程序当属`Word Count`。
+
+需求很简单，现在我们有一个文本文件，我们要统计文本中每个单词的出现次数。
+
+现在你需要：
+
+- [下载`shakespeare.txt`文件](/resources/shakespeare.txt)(这是一本莎翁全集，右键另存为)
+- 执行`python`，打开python的交互式解释器
+- 粘贴下面的代码运行
+
+**_word_count.py_**
+
+```python
+import pyspark.sql.functions as F
+from pyspark.sql import *
+
+spark = SparkSession.builder.getOrCreate()
+
+lines = spark.read.text("shakespeare.txt")
+words = lines.select(F.explode(F.split(lines.value, r"\s")).name("word")).where(F.length("word") > 0)
+counts = words.groupBy("word").agg(F.count("*").name("count")).orderBy(F.col("count").desc())
+
+counts.show()
+```
+
+**先别慌！**我知道突如其来的代码多少显得有些仓促。但是在第一节课你不需要了解其中细节。
+
+运行代码后你将会看到如下输出
+
+```text
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
++----+-----+
+|word|count|
++----+-----+
+| the|25815|
+|   I|20402|
+| and|19249|
+|  to|17222|
+|  of|16526|
+|   a|13870|
+|  my|11280|
+|  in|10347|
+| you| 9267|
+|  is| 8239|
+|that| 7980|
+| And| 7313|
+| not| 7257|
+|with| 7221|
+| his| 6712|
+|  be| 6293|
+|your| 6236|
+| for| 5973|
+|have| 5438|
+|  it| 5214|
++----+-----+
+only showing top 20 rows
+```
+
+可以看到，Spark已经正确输出了我们想要的结果。恭喜你运行了你的第一个Spark程序。
+
+现在，在让我们来看看上面的代码都做了些什么
+
+```python
+spark = SparkSession.builder.getOrCreate()
+```
+
+- 第一行代码创建了一个`SparkSession`对象，`SparkSession`是Spark应用的入口。
+
+```python
+lines = spark.read.text("shakespeare.txt")
+```
+
+- 通过Spark读取了文件，获取了`lines`
+- `lines`对象是一个`DataFrame`类型
+- 尝试运行`lines.show()`，你就能看到`lines`里的数据了
+
+```python
+words = lines.select(F.explode(F.split(lines.value, r"\s")).name("word")).where(F.length("word") > 0)
+```
+
+- 在已有的`lines`上我们进行了`split`(分词)和`explode`(分行)操作，这样我们就把一行文字变成了多行单词
+- 接着过滤掉长度为0的单词
+- 同样的，你可以运行`words.show()`看看`words`里的数据
+
+```python
+counts = words.groupBy("word").agg(F.count("*").name("count")).orderBy(F.col("count").desc())
+counts.show()
+```
+
+- 把我们拿到的所有单词进行分组
+- `agg`即aggregate，将每个分组聚合，计算数量`count`
+- 按照`count`降序排序
+- `count.show()`，打印结果
+- 先别退出python，打开浏览器，访问[http://localhost:4040](http://localhost:4040)，你会看到如下页面。
+这是Spark提供的Web UI界面，在这里你可以查看Spark任务的执行情况，自己随便点击玩玩看吧。
+
+<Image src={uiImage} placeholder={'blur'}/>
+
+以上就是`Word Count`程序的全部了，虽然你还不明白其中细节，但是我相信对整体逻辑你已经有所理解。
+同时，你也了解了Spark的代码风格。
+
+未来的章节，我们将详细介绍Spark的各个方面，这个例子也可能会不时被提到。等到学完之后再重新回来看这个例子，到时候或许会有不同的体验。

@@ -1,5 +1,5 @@
 import A0, {meta as m0} from './0-introduce.mdx'
-import {ArticleData, ArticleSet} from "../article";
+import {ArticleData, ArticleSet} from "../../../topic";
 
 const Introduce = {Component: A0, meta: m0}
 

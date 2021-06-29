@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import clsx from "clsx";
-import {AllArticles, ArticleData, ArticleSet} from "./topics/react/articles/article";
+import {ReactArticles} from "./topics/react/articles/article";
 import css from './TOC.module.css'
+import {ArticleData, ArticleSet} from "./topics/topic";
 
 type Props = {
   articleSet: ArticleSet
@@ -12,7 +13,7 @@ export const TOC = (props: Props) => {
   return (
     <div className={'flex flex-row h-full relative'}>
       <ul className={'text-xl h-full border-r block mr-1 pr-1'}>
-        {AllArticles.map(e => (
+        {ReactArticles.map(e => (
           <li key={e.id}>
             <Link href={`/article/react/${e.id}/${e.articles[0].meta.id}`}>
               <div className={clsx(css.item, e.id === props.articleSet.id ? css.activeItem : css.inactiveItem)}>

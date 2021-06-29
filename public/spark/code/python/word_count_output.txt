@@ -1,0 +1,28 @@
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
++----+-----+
+|word|count|
++----+-----+
+| the|25815|
+|   I|20402|
+| and|19249|
+|  to|17222|
+|  of|16526|
+|   a|13870|
+|  my|11280|
+|  in|10347|
+| you| 9267|
+|  is| 8239|
+|that| 7980|
+| And| 7313|
+| not| 7257|
+|with| 7221|
+| his| 6712|
+|  be| 6293|
+|your| 6236|
+| for| 5973|
+|have| 5438|
+|  it| 5214|
++----+-----+
+only showing top 20 rows

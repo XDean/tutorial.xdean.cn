@@ -14,7 +14,7 @@ import A12, {meta as m12} from './memo.mdx'
 import A13, {meta as m13} from './ref.mdx'
 import A14, {meta as m14} from './tic-tac-toe.mdx'
 import A15, {meta as m15} from './summary.mdx'
-import {ArticleData, ArticleSet} from "../article";
+import {ArticleData, ArticleSet} from "../../../topic";
 
 const Introduce = {Component: A0, meta: m0}
 const HelloWorld = {Component: A1, meta: m1}
