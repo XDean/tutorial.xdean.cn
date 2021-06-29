@@ -6,7 +6,9 @@ module.exports = withMDX({
   options: {
     remarkPlugins: [],
     rehypePlugins: [
-      rehypePrism
+      [rehypePrism, {
+        ignoreMissing: true
+      }]
     ],
   },
 })

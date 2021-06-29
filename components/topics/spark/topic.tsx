@@ -4,12 +4,10 @@ import sparkLogo from '../../../public/spark/spark.svg'
 import Image from 'next/image'
 
 export const SparkTopic: Topic = {
+  id: 'spark',
   name: 'Spark',
   draft: true,
-  topbar: {
-    title: 'XDean的Spark教程',
-    left: <Image src={sparkLogo} alt={'Spark Logo'} height={45} width={100}/>
-  },
+  Icon: () => <Image src={sparkLogo} alt={'Spark Logo'} height={40} width={100}/>,
   articles: [
     BasicArticleSet,
   ]

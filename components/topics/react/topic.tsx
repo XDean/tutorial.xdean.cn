@@ -6,12 +6,14 @@ import {faReact} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export const ReactTopic: Topic = {
+  id: 'react',
   name: 'React',
   draft: false,
-  topbar: {
-    title: 'XDean的React教程',
-    left: <FontAwesomeIcon icon={faReact} className={'text-react animate-spin-slow duration-1000'}/>
-  },
+  Icon: () => (
+    <FontAwesomeIcon icon={faReact}
+                     className={'text-react animate-spin-slow duration-1000 h' +
+                     'over:ring-2 ring-react !w-[36px] !h-[36px] rounded-[18px]'}/>
+  ),
   articles: [
     BasicArticleSet,
     ProjectArticleSet,

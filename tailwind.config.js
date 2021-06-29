@@ -12,6 +12,9 @@ module.exports = {
       },
       textColor: {
         'react': '#61dafb',
+      },
+      ringColor: {
+        'react': '#61dafb',
       }
     },
   },
