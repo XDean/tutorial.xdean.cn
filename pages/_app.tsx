@@ -6,7 +6,7 @@ function MyApp({Component, pageProps}: AppProps) {
   return (
     <>
       <Head>
-        <title>XDean的React教程</title>
+        <title>XDean的教程</title>
       </Head>
       <Component {...pageProps}/>
     </>
