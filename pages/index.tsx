@@ -1,4 +1,4 @@
-import {AllArticles} from "../components/article/article";
+import {AllArticles} from "../components/topics/react/articles/article";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 

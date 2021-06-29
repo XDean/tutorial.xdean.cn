@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import clsx from "clsx";
-import {AllArticles, ArticleData, ArticleSet} from "./article/article";
+import {AllArticles, ArticleData, ArticleSet} from "./topics/react/articles/article";
 import css from './TOC.module.css'
 
 type Props = {

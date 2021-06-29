@@ -1,6 +1,6 @@
 import {ReactEditor, ReactEditorProps} from "./ReactEditor";
 import useSWR from "swr";
-import {fetchStatic} from "../util/fetch";
+import {fetchStatic} from "../../../util/fetch";
 
 type Props = {
   js: string

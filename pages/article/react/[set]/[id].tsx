@@ -3,7 +3,7 @@ import {useRouter} from 'next/router'
 import {TOC} from "../../../../components/TOC";
 import {useEffect} from "react";
 import {Article} from "../../../../components/Article";
-import {AllArticles} from "../../../../components/article/article";
+import {AllArticles} from "../../../../components/topics/react/articles/article";
 import Head from 'next/head'
 
 export default function Index() {
