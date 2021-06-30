@@ -27,10 +27,16 @@ from pyspark.sql import *
 spark = SparkSession.builder.getOrCreate()
 
 lines = spark.read.text("shakespeare.txt")
-words = lines.select(F.explode(F.split(lines.value, r"\s")).name("word")).where(F.length("word") > 0)
-counts = words.groupBy("word").agg(F.count("*").name("count")).orderBy(F.col("count").desc())
+words = lines \
+    .select(F.explode(F.split(lines.value, r"\s")).name("word")) \
+    .where(F.length("word") > 0)
+counts = words \
+    .groupBy("word") \
+    .agg(F.count("*").name("count")) \
+    .orderBy(F.col("count").desc())
 
 counts.show()
+
 ```
 
 **先别慌！**我知道突如其来的代码多少显得有些仓促。但是在第一节课你不需要了解其中细节。
@@ -87,7 +93,9 @@ lines = spark.read.text("shakespeare.txt")
 - 尝试运行`lines.show()`，你就能看到`lines`里的数据了
 
 ```python
-words = lines.select(F.explode(F.split(lines.value, r"\s")).name("word")).where(F.length("word") > 0)
+words = lines \
+    .select(F.explode(F.split(lines.value, r"\s")).name("word")) \
+    .where(F.length("word") > 0)
 ```
 
 - 在已有的`lines`上我们进行了`split`(分词)和`explode`(分行)操作，这样我们就把一行文字变成了多行单词
@@ -95,7 +103,10 @@ words = lines.select(F.explode(F.split(lines.value, r"\s")).name("word")).where(
 - 同样的，你可以运行`words.show()`看看`words`里的数据
 
 ```python
-counts = words.groupBy("word").agg(F.count("*").name("count")).orderBy(F.col("count").desc())
+counts = words \
+    .groupBy("word") \
+    .agg(F.count("*").name("count")) \
+    .orderBy(F.col("count").desc())
 counts.show()
 ```
 

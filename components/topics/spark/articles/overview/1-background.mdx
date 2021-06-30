@@ -1,0 +1,54 @@
+import Image from 'next/image'
+import dataYear from '../../../../../public/spark/resources/data_year.png'
+import dataUnitTable from '../../../../../public/spark/resources/data_unit_table.jpg'
+import ibmZ15 from '../../../../../public/spark/resources/ibm_z15.png'
+
+export const meta = {
+  id: 'background',
+  name: '大数据背景',
+}
+
+在当今这个时代，大数据已经不是什么新鲜的名词了。
+
+但凡是小有规模的公司，都配备了专门的数据部门。
+而且这里的公司可不只是互联网公司，而是涵盖了能源，医疗，通信，零售，娱乐等等。
+
+无论是听歌还是购物，短视频甚至看广告，大数据已然渗入我们生活的方方面面。
+
+## 数据究竟有多大
+
+在开始处理大数据之前，第一个问题就是数据到底有多大。
+我们日常生活中最常接触的数据单位是`KB,MB,GB`，但你知道全世界每年有多少数据产生么？
+
+下图是全世界数据总量以及对未来数据总量的预测，纵轴单位是ZB(ZetaBytes)
+
+<Image src={dataYear}/>
+
+当然，我们现在依然不知道数据有多大，因为我们压根不知道ZB是多大。
+
+为了了解ZB有多大，请看下图
+
+<Image src={dataUnitTable}/>
+
+没错，一个ZB的数据需要1000个数据中心来存储，或者换算成纽约曼哈顿街区的五分之一。
+
+## 大数据如何处理
+
+在现代大数据技术(Hadoop, Spark)出现之前虽然不乏有MPI之类分布式计算方案，但是解决大型计算主要靠的还是单机。
+
+经典的方案例如IOE架构：IBM的大型机，Oracle的数据库和EMC的存储。
+
+<div className={'w-[400px] max-w-full'}>
+  <Image src={ibmZ15}/>
+</div>
+
+然而就算IBM Z15顶配有惊人的190 core和40TB内存，在面对真正的大数据时依然捉襟见肘。（同时它还有着惊人的价格）
+
+那么既然单机不成，我们自然而然地走上了另一条道路，即**分布式**。
+
+俗话说三个臭皮匠顶个诸葛亮，3台x86能不能顶一个z15，如果不能，那就30台，300台。
+
+而如何让这些机器协作起来，就是构建分布式系统的过程。其中最为关键的就是**分布式存储**和**分布式计算**技术，下一节我们会回顾相关技术的发展历程。
+
+
+
