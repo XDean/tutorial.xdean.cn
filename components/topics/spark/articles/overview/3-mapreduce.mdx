@@ -1,0 +1,93 @@
+import Image from 'next/image'
+import mapReduce from '../../../../../public/spark/resources/mapreduce.png'
+
+export const meta = {
+  id: 'mapreduce',
+  name: 'MapReduce',
+}
+
+MapReduce是一种分布式计算模型，其实它的原理很简单，即所有计算都是Map和Reduce的组合。
+这一思想受到函数式编程常用的`map`和`reduce`操作启发。
+当然，MapReduce重要的并不是`map`和`reduce`函数本身，而是如何通过执行引擎分发任务以做到可扩展性和容错性。
+
+## Map & Reduce
+
+- 所谓Map操作，就是不需要依赖数据其他部分就可以完成的操作，是一个独立的任务。<br/>
+例如，把一个数组里的所有数字乘以2，`arr.map(e => e*2)`，每个计算只需要依赖数组的一个元素，而不需要依赖整体。
+
+- 而反之，所谓Reduce操作，就是需要依赖数据全体才可以完成的操作。<br/>
+例如，给一个数组求和，`arr.reduce((a, b) => a + b)`，这个任务需要依赖数组全体才能完成。
+
+这就是MapReduce的全部抽象，所有的业务都要被转换成Map和Reduce操作。
+
+### WordCount
+
+举一个实际的例子，WordCount，这是大数据世界里的HelloWorld程序。
+
+需求很简单，给定一个文本，统计其中每个单词的出现频率。
+
+如果用简单的循环实现，则代码形如：
+
+```javascript
+lines = readLines(file)
+res = {}
+for line in lines:
+  words = lines.split(' ')
+  for word in words:
+    res[word] += 1
+```
+
+如果用函数式编程实现，则代码形如：
+
+```javascript
+readLines(file)
+  .flatmap(e => e.split(' '))
+  .reduce({}, (res, e) => res[e] += 1)
+```
+
+而如果用MapReduce实现，则代码形如：
+
+```javascript
+function map(String line):
+  for word in line:
+    emit(key=word, value=1)
+
+function reduce(String key, Iterator<int> values):
+  sum = 0
+  for v in values:
+    sum += v
+  emit(key, sum)
+```
+
+可以看到，在MapReduce中，任务被划分为了两个阶段(其中key的作用会在后文解释)
+
+1. map负责把每行字符串分割，对每个单词输出`(word, 1)`
+2. reduce负责把map输出的数据合并为单词的总频率
+
+这样，一个MapReduce版本WordCount应用就完成了。剩下的就只要交给执行引擎去调度了。
+
+## 作业执行
+
+上面我们已经成功的实现了map和reduce函数，现在我们要把我们的代码提交给执行引擎。
+
+作业的执行正是MapReduce的价值所在，它把分布式的所有困难进行了封装，例如并行，容错，数据分布，负载均衡。
+MapReduce的用户并不需要关心任何细节就可以完成分布式作业。
+
+这里我们简单地介绍其运行原理。
+更多详情可以参阅论文[MapReduce: Simplified Data Processing on Large Clusters](https://research.google.com/archive/mapreduce-osdi04.pdf)
+
+<div className={'w-[800px] max-w-full'}>
+  <Image src={mapReduce}/>
+</div>
+
+上图为一个典型的MapReduce执行流程，下面的步骤与图中序号一一对应。
+
+1. 用户程序首先调用分片器(partitioner)将输入文件分割成$M$个分片(partition) *(此步骤未表序号，对应图中最左侧的`input file split`)*。<br/>
+然后用户程序在集群中创建大量的程序副本。
+2. 这些程序副本中有一个特殊的master程序，它首先被创建，并用来分配剩余的worker任务。一共有$M$个Map任务和$R$个Reduce任务被分配。(其中$R$是用户指定的)
+3. 被分配了Map任务的Worker读取对应的输入文件分片，并通过Map函数计算结果，结果含存在内存中。
+4. Map任务缓存的结果周期性地通过分片器分成$R$个区域并写入本地磁盘。同时本地存储位置会传回给master，之后由master发送给Reduce任务。
+5. Reduce Worker收到master发来的存储位置信息，就会到Map主机地磁盘上读取数据。<br/>
+在读取完所有的数据后，对数据的key进行排序，相同key的数据通过Reduce程序进行聚合。
+6. Reduce任务的结果会追加到所属分区的输出文件，所有任务完成后会通知master唤醒等待的用户程序。<br/>
+任务完成时会产生$R$个输出文件，它们一般不会被合并，而是会成为另一个MapReduce程序的输入。
