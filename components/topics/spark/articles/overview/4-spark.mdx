@@ -1,0 +1,102 @@
+import Image from 'next/image'
+import sparkCluster from '../../../../../public/spark/resources/spark_cluster.png'
+import sparkDAG from '../../../../../public/spark/resources/spark_dag.png'
+import sparkNarrowDep from '../../../../../public/spark/resources/spark_narrow_dep.png'
+
+export const meta = {
+  id: 'spark',
+  name: 'Spark',
+}
+
+上一节我们了解了MapReduce的工作原理，MapReduce在当时帮助许多企业解决了大数据计算问题。
+
+那么为什么Spark能从MapReduce的统治中杀出一条血路呢？
+
+1. 快！MapReduce在某些用例比MapReduce快100倍，一般情况下也会快5倍以上
+2. 易用，平缓的学习曲线。Spark提供了更高级的API，还提供交互式命令行
+3. 丰富的支持。Spark提供了丰富的支持，如流处理，图处理，机器学习
+4. 可部署在不同的平台，而不局限于Hadoop。如K8S，Mesos
+
+其中#1和#2是决定性因素，我们就这两点展开。
+
+## 易用性
+
+首先我们先来看易用性，还是以WordCount程序为例。下面是Spark的例子
+
+```python
+text_file = sc.textFile("hdfs://...")
+counts = text_file.flatMap(lambda line: line.split(" ")) \
+             .map(lambda word: (word, 1)) \
+             .reduceByKey(lambda a, b: a + b)
+counts.saveAsTextFile("hdfs://...")
+```
+
+这就是完整的例子了，可以直接在`pyspark`命令行里执行。
+
+而Hadoop MapReduce，代码太长，可以自行打开参看Hadoop文档的[WordCount][hadoop]。
+即使去掉`import`，代码也有数十行之多。
+而且这些代码不易理解，逻辑分离在`map`和`reduce`两个阶段里。
+
+一个最简单的WordCount尚且如此，就更不要说复杂用例了。这也是为什么后来发明了Pig，Hive等等工具来增强MapReduce。
+
+另一方面，Spark支持Python语言，这也使得许多数据科学家无需学习JVM语言，可以直接上手。
+
+## 快
+
+在了解Spark为什么快之前，让我们先了解Spark的集群结构和作业执行。
+
+### Spark集群
+
+<Image src={sparkCluster}/>
+
+上面就是Spark集群的结构图。
+
+1. 图中间的Cluster Manager又被叫做master，它负责管理整个集群所有Worker的状态
+2. 图左边的Driver Program就是我们的Spark程序，`SparkContext`是Spark程序的入口，它封装了与集群交互的细节。
+3. 图右侧就是数个Worker节点，它们负责执行任务，Worker进程会按照配置项为应用程序创建Executor进程来执行作业
+
+### Spark作业
+
+典型的Spark作业流程如下：
+
+1. 用户程序(driver)启动，创建一个SparkContext，其中指定一个Master地址
+2. Master按照配置项分配资源，并通知对应的Worker进程创建Executor，并将结果返回给Driver
+3. Driver得知创建成功后就可以继续执行代码了
+4. 当需要进行Spark作业(Job)时，通过DAG分析将Spark作业划分阶段(Stage)，每个Stage包含许多任务(Task)，这些Task被分派给Executor执行
+5. Executor的执行结果会通知回到Driver
+
+### DAG
+
+在作业中提到的DAG，全称有向无环图(Directed Acyclic Graph)。一个典型的DAG形如：
+
+<div className={'w-[800px] max-w-full'}>
+  <Image src={sparkDAG}/>
+</div>
+
+Spark会分析用户代码构建一个DAG来表示作业。在DAG中整个作业被分为数个Stage，每个Stage包含若干Task。
+
+而划分Stage的依据就是Shuffle，这个概念在MapReduce中我们有提到。
+在Spark中还有另一种说法，宽依赖和窄依赖。
+
+- 窄依赖，即不需要Shuffle，每个分区的结果只被一个后续分区依赖。典型的如：`map`, `filter`
+- 宽依赖，即需要Shuffle，每个分区的结果被所有后续分区依赖。典型的如：`groupBy`, `reduceBy`
+
+<Image src={sparkNarrowDep}/>
+
+### Spark为什么快
+
+说到这里，我们可以回来讲讲为什么Spark比MapReduce快
+
+1. Spark默认不读写磁盘，大部分操作在内存完成；而MapReduce每个中间结果都需要读写磁盘。这一点大大减少了IO时间
+2. Spark为一个应用配备一组Executor；而MapReduce为每个任务启动新的进程。这一点减少了启动JVM的时间
+3. Spark分析作业为DAG，可以优化执行计划；而MapReduce任务需要手动规划。这一点减少了人为导致的无效计算 （*注：Spark SQL还内置了优化器，进一步优化了执行过程*）
+
+## 下一步
+
+现在，你已经了解了Spark的基本原理，现在开始第二部分，上手Spark吧。
+
+
+[hadoop]: https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Source_Code
+
+
+
