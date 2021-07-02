@@ -24,9 +24,9 @@ Google做搜索引擎起家，天生就有大量数据。
 
 于是Google在内部研究了一系列分布式技术并应用到生产当中。在内部应用成熟后，Google把它们写进了三篇论文当中，而这也让未来十年的霸主Hadoop呼之欲出。
 
-- 2003年，[GFS: The Google File System](https://research.google.com/archive/gfs-sosp2003.pdf)
-- 2004年，[MapReduce: Simplified Data Processing on Large Clusters](https://research.google.com/archive/mapreduce-osdi04.pdf)
-- 2006年，[Bigtable: A Distributed Storage System for Structured Data](https://research.google.com/archive/bigtable-osdi06.pdf)
+- 2003年，[GFS: The Google File System][gfs]
+- 2004年，[MapReduce: Simplified Data Processing on Large Clusters][mapreduce]
+- 2006年，[Bigtable: A Distributed Storage System for Structured Data][bigtable]
 
 这三篇论文以及对应的技术后来被誉为Google大数据的三驾马车。
 他们分别解决了大数据的三个问题：分布式文件系统，分布式计算，分布式数据库。
@@ -120,7 +120,7 @@ Hadoop的主要痛点之一就是MapReduce过于底层。虽然任何变换都�
 
 除了快，Spark还带来了便捷，不同于MapReduce只有Map和Reduce，Spark提供了更高级的抽象，这使得Spark更容易上手。
 
-比如说一个典型的WordCount程序，Spark只需要三行，而且非常容易理解。(作为对比，可以看看[Hadoop的WordCount](https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Source_Code))
+比如说一个典型的WordCount程序，Spark只需要三行，而且非常容易理解。(作为对比，可以看看[Hadoop的WordCount][hadoop-wordcount])
 
 ```scala
 val textFile = sc.textFile("hdfs://...")
@@ -198,3 +198,9 @@ Beam试图用一套统一的API来抽象数据处理的过程，下层适配各�
 - https://www.infoq.cn/article/o2wfzkiwfu*lnp3ijxgz
 - https://medium.com/@markobonaci/the-history-of-hadoop-68984a11704
 - https://cloud.tencent.com/developer/article/1640405
+
+
+[gfs]: https://research.google.com/archive/gfs-sosp2003.pdf
+[mapreduce]: https://research.google.com/archive/mapreduce-osdi04.pdf
+[bigtable]: https://research.google.com/archive/bigtable-osdi06.pdf
+[hadoop-wordcount]: https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Source_Code

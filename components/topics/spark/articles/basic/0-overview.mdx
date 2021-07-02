@@ -1,54 +1,80 @@
+import Image from 'next/image'
+import sparkStack from '../../../../../public/spark/resources/spark-stack.png'
+import sparkDownload from '../../../../../public/spark/resources/spark-download.png'
+
 export const meta = {
   id: 'overview',
-  name: '概览',
+  name: '准备',
 }
 
 ## 关于本教程
 
-- 本教程基于Spark v3.0.1, Python 3.6
-- 主要参考[Spark官方文档](https://spark.apache.org/docs/3.0.1/)
-- 主要使用Dataframe而非RDD（关于它们是什么会在后文学到）
-- 内容不包含集群的安装部署
+- 本教程基于Spark v3.1.2, Python 3.6
+- 主要参考[Spark官方文档](https://spark.apache.org/docs/3.1.2/)
 - 示例代码主要使用Python，未来可能会添加Scala示例
+- 内容不包含集群的安装部署
 
 ## 关于Spark
 
 - Spark是用于处理大规模数据的计算引擎
 - Spark主要提供了Java，Scala，Python和R语言的高级API
-- Spark为结构化数据处理提供了[Spark SQL](https://spark.apache.org/docs/3.0.1/sql-programming-guide.html)
-- Spark为机器学习提供了[MLlib](https://spark.apache.org/docs/3.0.1/ml-guide.html)
-- Spark为图计算提供了[GraphX](https://spark.apache.org/docs/3.0.1/graphx-programming-guide.html)
-- Spark为增量计算和流处理提供了[Structed Stream](https://spark.apache.org/docs/3.0.1/structured-streaming-programming-guide.html)
+- Spark为结构化数据处理提供了[Spark SQL](https://spark.apache.org/docs/3.1.2/sql-programming-guide.html)
+- Spark为机器学习提供了[MLlib](https://spark.apache.org/docs/3.1.2/ml-guide.html)
+- Spark为图计算提供了[GraphX](https://spark.apache.org/docs/3.1.2/graphx-programming-guide.html)
+- Spark为增量计算和流处理提供了[Structed Stream](https://spark.apache.org/docs/3.1.2/structured-streaming-programming-guide.html)
 
-### Spark如何执行
+<Image src={sparkStack}/>
 
-*此处只为给你一个基本的认识，更多细节会在原理篇讲解*
+## 安装
 
-- 一个Spark集群由运行在多个机器上的Spark进程连结而成，包括一个master节点和数个worker节点
-- 我们编写的Spark应用程序会通过master节点提交给Spark集群运行，并在worker节点创建executor进程
-- Spark自动地将我们的任务划分后分发给每个executor进程计算
-- 本地模式下，Spark会启动多个线程来模拟executor
+### JRE
 
-## 安装/运行 Spark
+Spark是用Scala编写的，需要安装Java。版本要求8或11。
 
-Spark可以运行在本地或集群环境中，集群环境主要有以下几种
+[JRE-8 下载地址][jre-download]
 
-- [Standalone](https://spark.apache.org/docs/3.0.1/spark-standalone.html)，Spark自带的集群管理器
-- [Apache Mesos](https://spark.apache.org/docs/3.0.1/running-on-mesos.html)
-- [Hadoop Yarn](https://spark.apache.org/docs/3.0.1/running-on-yarn.html)
-- [Kubernetes](https://spark.apache.org/docs/3.0.1/running-on-kubernetes.html)
+**注意**，你还需要正确配置`JAVA_HOME`环境变量
 
-**但是**，本教程不涉及集群部署相关知识，对此感兴趣的同学可以自行阅读文档安装部署Spark集群。
+验证安装：
 
-本地模式的Spark只需要安装
+```bash
+$ java -version
+java version "1.8.0_271"
+Java(TM) SE Runtime Environment (build 1.8.0_271-b09)
+Java HotSpot(TM) Client VM (build 25.271-b09, mixed mode, sharing)
 
-- JRE，Spark是用Scala编写的，需要Java运行环境
-- Python，我们的示例用python编写，需要python运行环境
+$ echo $JAVA_HOME
+C:\Users\dxu\coding\jdk\jdk-8u162-windows-x64
+```
 
-安装完Python后运行以下命令安装`pyspark`包
+### Python
+
+我们的教学示例使用Python，需要安装Python。版本要求3.6+。
+
+[Python 下载地址][python-download]
+
+验证安装：
+
+```bash
+$ python --version
+Python 3.6.12
+```
+
+Python安装完成后我们还要安装`pyspark`包
 
 ```bash
 pip install pyspark
 ```
 
+### Spark
+
+[Spark 下载地址](http://spark.apache.org/downloads.html)
+
+<Image src={sparkDownload}/>
+
+
 现在Spark已经成功安装，你可以开始学习Spark了！
+
+[jre-download]: https://www.oracle.com/java/technologies/javase-jre8-downloads.html
+[python-download]: https://www.python.org/downloads/
+[spark-download]: http://spark.apache.org/downloads.html
