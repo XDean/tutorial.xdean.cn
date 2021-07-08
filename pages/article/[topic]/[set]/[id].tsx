@@ -1,5 +1,5 @@
 import {DefaultLayout} from "../../../../components/layout/DefaultLayout";
-import {useRouter} from 'next/router'
+import {Router, useRouter} from 'next/router'
 import {TOC} from "../../../../components/TOC";
 import {useEffect, useRef, useState} from "react";
 import {Article} from "../../../../components/Article";
@@ -33,7 +33,15 @@ export default function Index() {
   }, [router])
 
   useEffect(() => {
-    articleContainerRef.current?.scrollTo(0, 0)
+    const handler = () => {
+      articleContainerRef.current?.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    };
+    Router.events.on('routeChangeComplete', handler);
+    return () => Router.events.off('routeChangeComplete', handler)
   }, [article])
 
   if (!router.isReady || !topic || !articleSet || !article) {
