@@ -1,7 +1,7 @@
 import {DefaultLayout} from "../../../../components/layout/DefaultLayout";
 import {useRouter} from 'next/router'
 import {TOC} from "../../../../components/TOC";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Article} from "../../../../components/Article";
 import Head from 'next/head'
 import {AllTopics} from "../../../../components/topics/topics";
@@ -12,6 +12,7 @@ export default function Index() {
   const [topic, setTopic] = useState<Topic>()
   const [articleSet, setArticleSet] = useState<ArticleSet>()
   const [article, setArticle] = useState<ArticleData>()
+  const articleContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!router.isReady) {
@@ -31,11 +32,16 @@ export default function Index() {
     }
   }, [router])
 
+  useEffect(() => {
+    articleContainerRef.current?.scrollTo(0, 0)
+  }, [article])
+
   if (!router.isReady || !topic || !articleSet || !article) {
     return null
   }
 
   const topicTitle = topic.title || `XDean的${topic.name}教程`
+
 
   return (
     <DefaultLayout topbar={{
@@ -50,7 +56,9 @@ export default function Index() {
         <div className={'max-w-2/12 h-full border-r p-1 mr-2 overflow-auto'}>
           <TOC topic={topic} articleSet={articleSet} article={article}/>
         </div>
-        <div className={'w-0 flex-grow h-full relative overflow-auto'}>
+        <div className={'w-0 flex-grow h-full relative overflow-auto'}
+             ref={articleContainerRef}
+        >
           <Article topic={topic} articleSet={articleSet} article={article}/>
         </div>
       </div>
