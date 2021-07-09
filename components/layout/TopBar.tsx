@@ -17,11 +17,11 @@ export const TopBar = (props: TopBarProps) => {
     <div className={'w-full shadow-md p-2 border-b bg-white z-10 flex flex-row items-center'}>
       <div className={'flex flex-row items-center justify-center'}>
         <Link href={'/'}>
-          <a className={'inline-flex hover:border-b-2 border-blue-200'}>
-            <Image src={homeLogo} width={40} height={40} className={'-m-2'}/>
+          <a className={'inline-flex hover:animate-bounce'}>
+            <Image src={homeLogo} width={40} height={40}/>
           </a>
         </Link>
-        <div className={'hidden md:block'}>
+        <div className={'hidden md:block ml-2'}>
           {props.left}
         </div>
       </div>
