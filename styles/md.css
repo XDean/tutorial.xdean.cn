@@ -9,5 +9,5 @@
 }
 
 .markdown-body pre {
-    max-width: 70%;
+    @apply max-w-full md:max-w-[70%];
 }

@@ -61,7 +61,9 @@ export default function Index() {
         <title>{article.meta.name} | {topicTitle}</title>
       </Head>
       <div className={'w-full h-full flex flex-row items-center'}>
-        <div className={'max-w-2/12 h-full border-r p-1 mr-2 overflow-auto'}>
+        <div className={
+          'max-w-2/12 h-full border-r p-1 mr-2 overflow-auto ' +
+          'hidden md:block'}>
           <TOC topic={topic} articleSet={articleSet} article={article}/>
         </div>
         <div className={'w-0 flex-grow h-full relative overflow-auto'}
