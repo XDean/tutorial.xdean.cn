@@ -16,7 +16,6 @@ export const meta = {
 - RDD从Spark 1.0版本就存在。
 - RDD是数据元素的集合，集合被分为分区(partition)，分布在集群的各个节点上。
 - RDD的元素很多时候以`(key,value)`键值对的形式组织，键是分区混洗的依据。
-- RDD可以通过现有数据(如一个数组)创建，也可以通过读取外部资源创建。
 - RDD是不可变的，它可以通过操作符生成新的RDD。(这类操作符被称为转换Transformation)
 - RDD是惰性的，只有当操作符结果不为RDD时才会提交任务进行计算。(这类操作符被称为动作Action)
 - RDD是容错的，它维护了所有的依赖RDD，当错误发生时可以通过依赖重建分区(依赖关系又被称为血统Lineage)
@@ -74,4 +73,4 @@ export const meta = {
 - 事实上，Spark的很多内置API都已经转移到了DataFrame,例如MLlib
 - 只有在必要时使用RDD，在编写RDD同时你必须要知道你需要自己去优化它们
 
-后文我们将同时学习RDD和DataFrame两种API的使用。
+后文我们将同时学习RDD和DataFrame两种API的使用，重点放在DataFrame。
