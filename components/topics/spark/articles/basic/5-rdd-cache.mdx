@@ -1,0 +1,73 @@
+export const meta = {
+  id: 'rdd-cache',
+  name: 'RDD持久化',
+}
+
+持久化是Spark最重要的功能之一，通过持久化可以让你在重用RDD时获得快速响应。
+
+首先让我们来看一个例子：
+
+```python
+rdd1 = sc.parallelize(range(0, 20))
+
+def slow_work(e):
+  import time
+  time.sleep(5)
+  return e
+
+rdd2 = rdd1.map(slow_work)
+rdd2.count()
+rdd2.reduce(lambda a,b: a+b)
+```
+
+我们模拟了一个耗时任务，每次计算需要5秒时间。在计算完毕后，我们进行了计数和求和的操作。
+
+运行代码你会发现，计数和求和都分别花费了很长时间。在我的8 core环境下每个任务运行了20s左右。
+
+这是因为Spark惰性计算，只有当进行Action操作时才会真正计算。
+
+- 当调用`count`时提交任务，并向上计算所有依赖，此时会调用`map(slow_work)`。
+- 而调用`reduce`时再一次向上计算所有依赖，又一次执行`map(slow_work)`任务。
+
+但是我们自己明白，rdd2的值不需要多次计算。这时候就需要使用RDD的持久化功能。
+
+RDD持久化非常简单，只需要调用`cache`或者`persist`。
+被调用的RDD会被标记为持久化的，在第一次计算后保存其结果在内存或磁盘中。
+
+在上面的例子中，我们只需要添加一行到`rdd2.count()`之前。
+
+```python
+rdd2.cache()
+```
+
+现在，当你再次对`rdd2`进行多次操作时，只有第一次会触发计算，之后都会读取缓存。
+在我的环境中，一次`count`的时间从20s减少到了3s。
+
+## 存储级别
+
+在调用`persist`进行持久化时，可以指定一个存储级别(storageLevel)参数来控制存储在磁盘或内存。
+
+(`cache()`方法其实是`persist(MEMORY_ONLY)`的缩写)
+
+- MEMORY_ONLY，将反序列化的Java对象存储在JVM内存中
+- MEMORY_AND_DISK，将反序列化的Java对象存储在JVM内存中，不适用时存储在磁盘上
+- MEMORY_ONLY_SER，将序列化bytes存储在内存中，这将减小内存使用，但是命中时增加CPU使用
+- MEMORY_AND_DISK_SER，将序列化bytes存储在内存中，不适用时存储在磁盘上
+- MEMORY_ONLY_2，同MEMORY_ONLY，但是会在两个节点备份数据
+- MEMORY_AND_DISK_2，同MEMORY_AND_DISK，但是会在两个节点备份数据
+- OFF_HEAP(实验性)，同MEMORY_ONLY_SER，但是会存储在堆外内存
+
+_注意，使用Python时，总是存储为序列化对象，所以`MEMORY_ONLY_SER`和`MEMORY_AND_DISK_SER`不适用。_
+
+实际使用中，应当总是使用默认的`MEMORY_ONLY`等级，除非观测到性能瓶颈。可以参考[官方文档][spark-which-storage-level]
+
+## 销毁缓存
+
+Spark会监控节点上缓存的使用状况，以LRU的方式销毁旧数据。
+
+如果需要手动删除缓存，只需要调用`rdd.unpersist()`方法。
+
+
+
+
+[spark-which-storage-level]: http://spark.apache.org/docs/latest/rdd-programming-guide.html#which-storage-level-to-choose
