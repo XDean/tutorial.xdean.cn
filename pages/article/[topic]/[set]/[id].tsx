@@ -66,7 +66,7 @@ export default function Index() {
       </Head>
       <div className={'w-full h-full flex flex-row items-center'}>
         <div className={clsx(
-          'max-w-2/12 h-full border-r p-1 mr-2 shadow-lg overflow-auto bg-white transform transition absolute z-10 md:static',
+          'max-w-2/12 h-full border-r p-1 mr-2 shadow-lg md:shadow overflow-auto bg-white transform transition absolute z-10 md:static',
           openToc ? 'left-0 top-0 translate-x-0' : '-translate-x-full md:translate-x-0',
         )}>
           <TOC topic={topic} articleSet={articleSet} article={article}/>
