@@ -6,12 +6,16 @@ import {Article} from "../../../../components/Article";
 import Head from 'next/head'
 import {AllTopics} from "../../../../components/topics/topics";
 import {ArticleData, ArticleSet, Topic} from "../../../../components/topics/topic";
+import clsx from "clsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
 
 export default function Index() {
   const router = useRouter()
   const [topic, setTopic] = useState<Topic>()
   const [articleSet, setArticleSet] = useState<ArticleSet>()
   const [article, setArticle] = useState<ArticleData>()
+  const [openToc, setOpenToc] = useState(false)
   const articleContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -61,10 +65,17 @@ export default function Index() {
         <title>{article.meta.name} | {topicTitle}</title>
       </Head>
       <div className={'w-full h-full flex flex-row items-center'}>
-        <div className={
-          'max-w-2/12 h-full border-r p-1 mr-2 overflow-auto ' +
-          'hidden md:block'}>
+        <div className={clsx(
+          'max-w-2/12 h-full border-r p-1 mr-2 shadow-lg overflow-auto bg-white transform transition absolute z-10 md:static',
+          openToc ? 'left-0 top-0 translate-x-0' : '-translate-x-full md:translate-x-0',
+        )}>
           <TOC topic={topic} articleSet={articleSet} article={article}/>
+        </div>
+        <div className={'md:hidden absolute right-2 top-2 z-40 bg-white rounded-full p-1 ring-1 flex'}
+             onClick={() => setOpenToc(o => !o)}
+        >
+          <FontAwesomeIcon icon={faBars}
+                           className={'!w-4 !h-4 text-blue-300'}/>
         </div>
         <div className={'w-0 flex-grow h-full relative overflow-auto'}
              ref={articleContainerRef}

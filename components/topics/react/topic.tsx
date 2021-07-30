@@ -11,8 +11,7 @@ export const ReactTopic: Topic = {
   draft: false,
   Icon: () => (
     <FontAwesomeIcon icon={faReact}
-                     className={'text-react animate-spin-slow duration-1000 h' +
-                     'over:ring-2 ring-react !w-[36px] !h-[36px] rounded-[18px]'}/>
+                     className={'text-react animate-spin-slow duration-1000 hover:ring-2 ring-react !w-[36px] !h-[36px] rounded-[18px]'}/>
   ),
   articles: [
     BasicArticleSet,
