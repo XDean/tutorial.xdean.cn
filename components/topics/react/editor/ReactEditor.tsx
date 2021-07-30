@@ -26,10 +26,11 @@ export const ReactEditor = (props: ReactEditorProps) => {
 
   return (
     <div className={clsx(
-      'flex flex-row bg-white',
-      expand ? "z-20 fixed left-0 top-0 w-full h-full" : "w-full max-w-screen-xl h-[300px] my-2 mx-1 ring-1 ring-gray-500",
+      'flex flex-col md:flex-row bg-white',
+      expand ? "z-20 fixed left-0 top-0 w-full h-full" :
+        "w-full max-w-screen-xl h-[450px] md:h-[300px] my-2 mx-1 ring-1 ring-gray-500",
       props.className)}>
-      <div className={clsx('w-0 flex-grow border-r flex-col flex', props.hideCode && 'hidden')}>
+      <div className={clsx('h-[100px] md:h-auto md:w-0 flex-grow border-r flex-col flex', props.hideCode && 'hidden')}>
         <div className={'bg-black text-white text-lg flex flex-row items-center'}>
           <div
             className={clsx('mx-1 w-8 cursor-pointer hover:underline hover:text-gray-300', type === 'js' && 'underline')}
@@ -59,7 +60,7 @@ export const ReactEditor = (props: ReactEditorProps) => {
           </div>
         ))}
       </div>
-      <ReactPreviewer code={previewCode} className={'w-0 flex-grow'}/>
+      <ReactPreviewer code={previewCode} className={'h-0 md:h-auto md:w-0 flex-grow'}/>
     </div>
   )
 }
