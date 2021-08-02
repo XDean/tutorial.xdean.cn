@@ -18,7 +18,15 @@ export const LocaleStrings = {
   topicTitle: {
     zh: args => `XDean的${args[0]}教程`,
     en: args => `XDean's ${args[0]} Tutorial`,
-  } as Record<Locale, LocalStringValue>
+  } as Record<Locale, LocalStringValue>,
+  previousChapter: {
+    zh: '上一节',
+    en: 'Previous'
+  },
+  nextChapter: {
+    zh: '下一节',
+    en: 'Next'
+  }
 }
 
 export function useLocaleString() {
