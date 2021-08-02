@@ -1,0 +1,75 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'memo',
+  name: 'useMemo & memo'
+}
+
+## useMemo
+
+`useMemo`顾名思义，它用来返回一个[memorized](https://en.wikipedia.org/wiki/Memoization)值。
+
+它接收一个计算函数和一个依赖列表，只有当依赖项变化时，会重新进行计算。
+
+```jsx
+const Comp = ({a, b, c, d}) => {
+
+  const value = computeExpensiveValue(a,b)
+  // 上下两种方式会有性能差异
+  const value = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+
+  return (
+    <div>
+      ...
+      {value}
+    </div>
+  )
+}
+```
+
+`useMemo`可以帮助改善性能，减少昂贵的计算操作，避免每次渲染重新计算。
+
+细心的你可能会发现，这和`useEffect`很相像，都是在依赖变化时调用。
+但是请注意不要混淆两种用法，`useMemo`只关心渲染，任何与渲染无关的操作应当放在`useEffect`中。
+
+## React.memo
+
+除了减少昂贵计算的开销，`useMemo`还有一种用法是结合`React.memo`使用。
+
+`React.memo`用来包装一个组件为记忆组件，当组件的props不变时，不会重新创建组件，而是直接复用上一次调用的结果。
+
+```jsx
+const Label = React.memo(({text}) => (
+  <p>
+    {text}
+  </p>
+))
+```
+
+但是，许多时候只使用`React.memo`并不能得到预期的效果，请看下面的例子。
+
+<SrcReactEditor js={'/react/code/memo.jsx'}/>
+
+我们使用`React.memo`包装了`Label`组件。打开控制台，你会看到在点击时`<Label data={title}/>`组件依然被调用了。
+原因是，当`App`重新渲染时，`title`对象也是重新创建的，和上一次渲染时已经不是同一个对象，而`React.memo`只会进行浅比较。
+
+为了得到期望的内存组件，提高性能，我们需要把`title`包裹在`React.useMemo`里，尝试修改上面的代码。
+
+```javascript
+const title = React.useMemo(() => ({msg: 'React Counter', size: 20}), [])
+```
+
+## useCallback
+
+许多时候我们需要将回调函数传递给组件，例如`onClick`。他们的改变也会影响渲染，所以我们也想把他们变成内存值。
+
+```javascript
+const handleClick = React.useMemo(() => () => ..., [])
+```
+
+但是，上面的代码两层嵌套显得很繁琐，为了避免这样的写法，便有了`React.useCallback`作为快捷方式。
+下面的写法和上面的写法是等价的：
+
+```javascript
+const handleClick = React.useCallback(() => ..., [])
+```

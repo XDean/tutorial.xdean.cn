@@ -1,0 +1,27 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'ref',
+  name: '引用 useRef'
+}
+
+在受控组件一节我们讲到，React也可以拿到DOM元素对其操作。方法就是`useRef`钩子。
+
+```javascript
+// 创建ref
+const ref = useRef(initialValue)
+// 更改ref的值
+ref.current = ...
+```
+
+`useRef`接收一个可选的默认值，返回一个ref对象，其只有一个属性，即`current`。
+
+一个简单的例子如下：
+
+<SrcReactEditor js={'/react/code/ref.jsx'}/>
+
+1. 通过`useRef`创建一个ref对象
+2. 将ref对象传递给`input`元素，对应的DOM元素会在渲染时设置给ref
+3. 读取`ref.current`即可获得DOM元素
+
+需要注意的是，ref不同于state，它不是组件的状态，所以变化时不会导致重新渲染。

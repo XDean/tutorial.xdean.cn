@@ -1,0 +1,94 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'effect',
+  name: '副作用 useEffect'
+}
+
+前几节我们学习了组件并且可以通过`useState`控制他们的状态。
+
+你是否还记得`计数器`的例子。现在我们有了新的需求。
+
+- 每当计数变化，在命令行打印计数信息
+
+一个天真的想法是，在`onClick`方法里加上打印语句。
+但是这将导致我们要在`count`和`clear`做两处相同的修改，这使得维护的成本大大提高。
+
+这时，我们就需要使用`useEffect`。请看下面的例子
+
+<SrcReactEditor js={'/react/code/effect.jsx'}/>
+
+按下<kbd>F12</kbd>，然后操作新的计数器，可以看到我们打出的log信息。
+
+`useEffect`，副作用，顾名思义，它执行一些不直接和渲染UI相关的副作用。作为参数传递进去的函数会在每一次render的时候被调用。
+
+## Effect依赖项
+
+计数并打印log看上去没什么问题，现在我们又有了新的需求。
+
+- 添加一个按钮来控制提示信息的字体大小
+
+理所当然的，我们添加了一个新的状态`big`。结果如下
+
+<SrcReactEditor js={'/react/code/effect2.jsx'}/>
+
+看上去不错！但是，如果你仔细观察控制台，你会发现，在我们toggle字体大小的时候，也会打印log信息。这些冗余信息与我们的期望不符。
+
+这时，我们可以指定`useEffect`的第二个参数`deps`，它接收一个依赖列表，使得副作用只在依赖项改变时被调用。
+
+尝试修改上面例子里的`useEffect`，加上第二个参数，并到控制台看看log的变化
+
+```javascript
+useEffect(() => console.log(`count: ${count}`), [count])
+```
+
+一种特殊情况是空的依赖列表，这使得副作用只在组件第一次加载(被称为mount)的时候被调用。
+
+尝试在上面的例子添加一个`useEffect`打印一条信息，其依赖项为空
+
+```javascript
+useEffect(() => console.log(`mount`), [])
+```
+
+## 清除副作用
+
+实际业务中会的副作用可能不只是简单的打印语句，可能涉及很多外部操作，例如调用browser API，调用服务端API，连接WebSocket等等。
+这些副作用可能需要清除操作，否则会造成错误或是资源的浪费。
+
+现在我们的计数器又有了新的需求，要把数据上传到服务器。在我们的例子里，我们用简单的打印语句代替之。
+
+为了减小服务器的负载，我们希望不要每次点击都发送数据，而是在2秒内没有更多点击时才发送，这其实是前端UI常见的debounce特性。
+
+于是，我们在`useEffect`中进行了`setTimeout`操作，如下：
+
+```javascript
+React.useEffect(() => {
+  setTimeout(() => {
+    console.log(`send to server: ${count}`)
+  }, 2000)
+}, [count])
+```
+
+当然，这并不奏效，每一个请求依然发出了，只不过是延迟了2秒。现在我们要做的是在新的副作用之前清除旧的副作用。
+
+这在`useEffect`里非常简单，只需要在副作用函数里返回清除函数，清除函数会在该次渲染失效时执行
+
+<SrcReactEditor js={'/react/code/effect3.jsx'}/>
+
+现在，再次疯狂点击按钮，只有在你停下后，才会发送事件给服务器。
+
+## 总结
+
+`useEffect`用于执行副作用函数，它接收两个参数
+
+1. 副作用函数，该函数没有入参，可以返回一个清理函数(`Destructor`)
+2. 依赖列表(可选)
+
+- 副作用函数会在每次渲染时执行，清理函数会在渲染失效时执行
+- 如果定义了依赖项，则只在依赖项变化时触发副作用
+
+## 思考题
+
+在学习了`useState`和`useEffect`之后，我们已经可以定制许多有趣的功能，例如上面的计数器例子，稍作抽象就可以提取出一个`useDebounce`函数。
+
+现在，我想要一个`useEffectWithoutMount`，该副作用不在挂载(即第一次渲染)时触发，这该怎么做呢。

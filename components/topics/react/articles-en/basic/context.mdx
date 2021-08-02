@@ -1,0 +1,78 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'context',
+  name: '上下文 useContext'
+}
+
+上下文Context是程序世界中常见的概念，其表示了程序运行所处的环境状态。
+在React中，我们可以通过`React.createContext`创建上下文，并使用`useContext`获得上下文。
+
+你是否还记得状态提升一节我们留下的问题，使用Context我们可以解决多层状态嵌套的问题，便捷地访问父组件提供的状态。
+
+## 创建上下文
+
+创建上下文只需要调用`createContext`，需要传入上下文的默认值。
+
+```jsx
+const MyContext = React.createContext(defaultValue)
+```
+
+## 应用上下文
+
+现在我们有了上下文对象，在组件中可以加入`Context.Provider`作为父节点，则上下文会被应用到子树中。
+
+```jsx
+const App = () => (
+  <MyContext.Provider value={...}>
+    ...
+  </MyContext>
+)
+```
+
+## 获取上下文
+
+在父节点应用了上下文后，子节点就可以使用`useContext`来获取上下文。
+
+```jsx
+const Child = () => {
+  const ctx = React.useContext(MyContext);
+  ...
+}
+```
+
+## 例子
+
+<SrcReactEditor js={'/react/code/context.jsx'} css={'/react/code/context.css'}/>
+
+我们定义了一个主题上下文，包含了`light`和`dark`两种颜色模式。
+尝试将`ThemeContext.Provider`中的`value`改为`themes.dark`，你将会看到颜色的变化。
+
+## 修改上下文
+
+当然，我们不能只通过改代码的方式来修改上下文，我们希望通过一个按钮来控制主题的变换。
+
+这时，我们就需要把上下文的值提升为状态。并且在上下文中加入一个可以切换主题的方法，然后在子节点中就可以调用上下文中的方法来切换主题了。
+
+<SrcReactEditor js={'/react/code/context2.jsx'} css={'/react/code/context.css'}/>
+
+## 其他
+
+- 同一个上下文可以被多次定义，组件获取到的会是距离最近的上下文。
+- 如果父节点没有定义上下文，则获取到的上下问是创建时的默认值。
+- 不同上下文之间不会影响。
+
+多个上下文的例子
+
+```jsx
+const ThemeContext = React.createContext('light');
+const UserContext = React.createContext({name: 'Guest'});
+
+const App = () =>(
+  <ThemeContext.Provider value={'light'}>
+    <UserContext.Provider value={{name: 'xdean'}}>
+      <Layout/>
+    </UserContext.Provider>
+  </ThemeContext.Provider>
+)
+```

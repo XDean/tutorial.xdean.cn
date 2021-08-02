@@ -1,0 +1,109 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'controlled',
+  name: '受控组件'
+}
+
+前面的章节我们的例子主要是简单的文本内容，没有什么状态。
+
+现在让我们来考虑一个简单需求
+
+- 一个可以输入文字的文本框
+- 一个确认按钮，按下时弹出alert显示文本内容
+- 一个清楚按钮，按下时清除文本
+
+如果时用传统的HTML来写，大概会形如
+
+```jsx
+<input type="text" id="text"/>
+<button id="confirm">confirm</button>
+<button id="clear">clear</button>
+
+const text = document.getElementById('text')
+const confirm = document.getElementById('confirm')
+const clear = document.getElementById('clear')
+
+confirm.onclick = () => alert(text.value)
+clear.onclick = () => text.value = ''
+```
+
+我们需要获取对应的DOM元素对象，然后得到文本内容。
+
+在React里，你当然也可以采用同样的方法，具体的方法在之后的章节学习`useRef`会提到。
+
+但这并不是首选的方法。
+
+更多的时候，我们会采用受控组件的形式，来自己控制组件的。
+
+<SrcReactEditor js={'/react/code/controlled.jsx'}/>
+
+我们设置了`input`的`value`属性为`content`，所以当`content`变化时，`input`的值也会改变。
+
+下面的两个按钮则只需要面向`content`状态，而不需要和`input`接触。三个组件之间通过`content`联系了起来。
+
+像本例中的`input`一样的组件被称为**受控组件**，其状态受到父组件控制的组件。
+这样做的好处是，在需要与组件状态进行交互时，不需要通过命令来改变，而只需要改变数据。
+
+**这其实也是React响应式思想的体现。**
+
+## 状态提升
+
+除了默认的HTML标签，自定义组件许多时候也需要受控。这种模式又被称为状态提升。
+
+考虑现在我们有一个温度输入的组件，可以选择单位是摄氏度或者华氏度。
+
+<SrcReactEditor js={'/react/code/controlled2.jsx'}/>
+
+现在我们的需求是一个自动温度转换器，
+
+理所当然的，我们在`App`里加入了两个输入框
+
+<SrcReactEditor js={'/react/code/controlled2-2.jsx'}/>
+
+但是很可惜，两个文本框并没有自动转换，因为它们的状态由自己管理，不受外部控制。
+
+这个时候，我们就需要把组件变成**受控组件**，换句话也可以说把组件的**状态提升**到父组件。
+
+<SrcReactEditor js={'/react/code/controlled2-3.jsx'}/>
+
+## 小结
+
+**受控组件**是指状态收到父组件控制的组件，利用受控组件，业务逻辑可以关注在状态上而非UI元素。
+
+对于自定义组件，我们可以主动把它们变换成受控组件，使得父组件可以关联子组件的状态。这种模式被称为**状态提升**
+
+## 思考
+
+但是，状态提升也并非银弹，想象我们的UI组件逐渐复杂，从顶层组件到底层组件经历了许多层自定义组件的嵌套。
+
+现在再利用状态提升将状态汇聚到顶层组件，且不说逻辑混杂，光是一层层的属性传递就已经很让人难受了。
+
+```jsx
+const Avatar = () => (
+  <img src={user.avatar}/>
+)
+
+const UserInfo = () => (
+  <div>
+    <Avatar user={user}/>
+    ...
+  </div>
+)
+
+const AppBar = () => (
+  <div>
+    <UserInfo user={user}/>
+    ...
+  </div>
+)
+
+const App = () => (
+  <div>
+    <AppBar user={user}/>
+    ...
+  </div>
+)
+```
+
+如何处理这种情况，我们会在后面的章节学习到。

@@ -1,0 +1,44 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor"; import {Button} from "@blueprintjs/core"; import {useState} from "react";
+
+export const meta = {
+  id: 'tic-tac-toe',
+  name: '实践 - 井字棋'
+}
+
+本节我们将运用所学的知识来制作一个简单的井字棋游戏，最终成品如下
+
+<SrcReactEditor js={'/react/code/tic-tac-toe.jsx'} css={'/react/code/tic-tac-toe.css'} hideCode className={'w-6/12'}/>
+
+下面给出了初始代码，在此之上开始你的第一个React项目吧。
+
+(css样式不是我们的关注点，故已经默认提供)
+
+<SrcReactEditor js={'/react/code/tic-tac-toe-1.jsx'} css={'/react/code/tic-tac-toe.css'}/>
+
+规则：
+
+1. 双方轮流落子(O和X)
+2. 三子相连则判胜(横，竖，对角)
+3. 9格填满未分胜负则判平局
+
+其他需求：
+
+1. 显示当前对局状态
+2. 可回溯对局到历史状态
+
+export const Answer = () => {
+  const [show, setShow] = useState(false)
+  return (
+    <>
+      <Button onClick={() => setShow(e => !e)} text={show ? '隐藏参考示例' : '显示参考示例'}/>
+      <SrcReactEditor
+        className={show ? '' : 'hidden'}
+        js={'/react/code/tic-tac-toe.jsx'}
+        css={'/react/code/tic-tac-toe.css'}/>
+    </>
+  )
+}
+
+在你完成之后，可以点击下面的按钮来查看示例代码以做参考。
+
+<Answer/>

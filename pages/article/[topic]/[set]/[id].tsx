@@ -41,7 +41,7 @@ export default function Index() {
       setArticleSet(articleSet)
       setArticle(article)
     } else {
-      router.replace(`/`)
+      router.replace(`/article/${topic.id}`)
     }
   }, [router])
 

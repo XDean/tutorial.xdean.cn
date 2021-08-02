@@ -1,0 +1,121 @@
+import {Details} from "../../components/Details";
+
+export const meta = {
+  id: 'df-op',
+  name: 'DataFrame操作',
+}
+
+上一节我们学习了如何读取/保存DataFrame，这一节我们就来学习如何对DataFrame进行操作
+
+本节使用`titanic.csv`(泰坦尼克号乘客数据，右键另存为)作为示例数据。
+
+现在，在你的命令行里读取数据：
+
+```python
+df = spark.read.csv('titanic.csv', header=True, inferSchema=True)
+df.printSchema()
+print(df.count())
+df.show(5)
+```
+
+
+<Details title={'显示输出'}>
+
+```text
+root
+ |-- PassengerId: integer (nullable = true)
+ |-- Survived: integer (nullable = true)
+ |-- Pclass: integer (nullable = true)
+ |-- Name: string (nullable = true)
+ |-- Sex: string (nullable = true)
+ |-- Age: double (nullable = true)
+ |-- SibSp: integer (nullable = true)
+ |-- Parch: integer (nullable = true)
+ |-- Ticket: string (nullable = true)
+ |-- Fare: double (nullable = true)
+ |-- Cabin: string (nullable = true)
+ |-- Embarked: string (nullable = true)
+
+891
+
++-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+|PassengerId|Survived|Pclass|                Name|   Sex| Age|SibSp|Parch|          Ticket|   Fare|Cabin|Embarked|
++-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+|          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|       A/5 21171|   7.25| null|       S|
+|          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
+|          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| null|       S|
+|          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
+|          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| null|       S|
++-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+```
+
+</Details>
+
+## Show 显示
+
+`show`是最常用的操作之一，它可以打印出DF。
+
+默认打印前20个，并且每列会闲置最长20个字符。可以通过参数改变。
+
+```python
+df.show()
+df.show(5)
+df.show(5, truncate=30)
+df.show(truncate=False)
+```
+
+## DataFrame操作符
+
+_如果你曾经学习使用过pandas或者SQL，那么DataFrame的API会非常亲切，甚至无需学习就可以猜测出许多API_
+
+### Column 列
+
+DataFrame的所有操作都是基于列的，这与RDD基于值的操作非常不一样。
+
+例如，过滤操作：
+
+```python
+# rdd.filter(lambda e: e.Age < 10)
+
+df.filter(df.Age < 10).show(5)
+```
+
+<Details title={'显示输出'}>
+
+```text
++-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+|PassengerId|Survived|Pclass|                Name|   Sex| Age|SibSp|Parch|          Ticket|   Fare|Cabin|Embarked|
++-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+|          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|       A/5 21171|   7.25| null|       S|
+|          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
+|          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| null|       S|
+|          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
+|          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| null|       S|
++-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+```
+
+</Details>
+
+
+可以看到，RDD对每一个值判断是否大于10，而DF直接对列进行运算。这里的`df.Age`就是`Age`列。
+
+获得列(Column对象)的方式有多种
+
+```python
+df.Age        # 通过名字获得DataFrame的列
+df[5]         # 通过索引获得DataFrame的列
+F.col('Age')  # 通过列名构造，需要 import pyspark.sql.functions as F
+'Age'         # 直接使用列名，这不是一个列对象，不能进行运算
+```
+
+### Select 选中
+
+- 使用`select`操作可以选中一些列
+- 使用`drop`操作可以丢弃一些列
+- `df[[col1, col2]]`是`df.select(col1, col2)`的快捷方式
+
+```python
+df.select('Name', 'Sex').show(5)
+```
+
+

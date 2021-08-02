@@ -1,0 +1,58 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'hook',
+  name: '钩子 Hook'
+}
+
+敏锐的你可能发现，前几节学习的`useEffect`和`useState`的名称都以`use`开头。
+这些以`use`开头的API被称为React Hook，是React v16.8引入的新特性。
+在此之前，React组件多是用类`class`来定义。
+
+**本教程不会涉及任何关于class component的知识。Hook是React的首选方法。**
+
+所谓Hooks，其实就是一个函数，它们满足两个约束
+
+- 只在React函数组件内调用
+- 必须保证每次渲染时组件调用同样的Hook
+
+反例：
+
+```jsx
+function fetchUser() {
+  React.useEffect(() => ...) // 错误，Hook只能在React函数组件内调用
+  return fetch(...)
+}
+
+const App = ({login}) => {
+  if (!login) {
+    return 'you are not login'
+  }
+  const [input, setInput] = React.useState('') // 错误，不能在分支中调用，否则多次渲染时hook不一致
+  return (
+    ...
+  )
+}
+```
+
+在前面的章节，我们学习了`useState`和`useEffect`，这将是我们最常打交道的两个Hook。
+除此以外，React还定义了一些Hook，我们将在接下来的章节介绍常用的几个。
+
+## 自定义Hook
+
+除了React提供的Hook，我们还可以自定义Hook来提炼公用的逻辑。
+创建自定义钩子就是定义一个函数，名称以`use`开头，在函数内部可以调用其他Hook。
+
+你是否还记得在上一节，我们已经完成了一个debounce功能。
+现在，我们可以把他提炼为新的`useDebounce`钩子，当我们再需要debounce功能时，就可以很方便地调用自定义钩子了。
+
+<SrcReactEditor js={'/react/code/hook.jsx'}/>
+
+在上一节，我们还留了一个思考题，如何让`useEffect`在第一次渲染时不调用。
+其实只需要结合`useState`和`useEffect`就可以做到这个效果了。
+
+示例如下：
+
+<SrcReactEditor js={'/react/code/hook2.jsx'}/>
+
+现在，控制台不会在第一次渲染时打印`count:0`了。

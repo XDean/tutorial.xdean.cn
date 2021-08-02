@@ -1,0 +1,35 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'state',
+  name: '状态 useState'
+}
+
+在前一节我们讲到，属性`props`是外部给定的不可变状态，而组件内部的状态就得用到`state`。
+
+要声明状态很简单，只需要使用`React.useState`方法。
+
+让我们来看一个计数器的例子。
+
+<SrcReactEditor js={'/react/code/state.jsx'}/>
+
+`useState`接受一个参数作为默认值，也可以不填即为`undefined`。
+然后它返回一个数组，包含两个值
+
+1. 状态的值，即`count`
+2. 更改状态的函数，即`setCount`
+
+我们调用`setCount`就可以修改状态的值。
+而当状态被更改时，组件将会重新渲染。
+
+## 更新属性
+
+细心的你可能注意到，`setCount`方法可以接收值(例如`0`)或函数(例如`c => c + 1`)作为参数。
+
+当我们更新状态的时候，如果要用到状态原来的值，不应该直接使用。
+正确的方法是使用函数作为参数，状态的当前值将会作为函数的入参，
+
+```js
+setCount(count + 1) //错误
+setCount(c => c + 1) //正确
+```

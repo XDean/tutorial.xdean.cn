@@ -1,0 +1,24 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'list',
+  name: '列表渲染'
+}
+
+上一节我们学习了条件渲染，另一个常见的情况是，我们要渲染一组组件。
+
+让我们回头看看在组件一节中用过的示例：
+
+<SrcReactEditor js={'/react/code/component3.jsx'}/>
+
+显然，我们不能有多少个人就写多少个`<Welcome/>`。
+
+如果给定一个JS数组，包含了所有人的信息，我们可以直接在数组上运算出JSX元素。
+
+<SrcReactEditor js={'/react/code/list.jsx'}/>
+
+值得注意的是，在`Welcome`上我们指定了属性`key`。
+如果不指定`key`，在开发模式下会受到警告`a key should be provided for list items`。
+
+`key`的作用是让React在渲染时可以更准确地识别哪些元素变化了，从而降低负载。
+在使用列表渲染时必须要指定`key`，并且兄弟节点之间`key`是唯一地。

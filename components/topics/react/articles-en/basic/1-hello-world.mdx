@@ -1,0 +1,17 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'hello-world',
+  name: 'Hello World'
+}
+
+`Hello World`的示例已经在上一节中展示过，其实这短短的几行代码，已经展示了React最核心的功能。
+
+<SrcReactEditor js={'/react/code/hello-world.jsx'} css={'/react/code/hello-world.css'}/>
+
+React只做一件事，那就是渲染(render)组件。
+
+我们调用`ReactDOM.render`方法将React组件渲染到目标元素上。
+而`App`就是一个最简单的React组件。
+
+这里你会发现，与普通JS不同的是，我们在脚本中直接写入了`<h1>`这样的HTML标签，这是拓展的JSX语法，我们将在下一节介绍。

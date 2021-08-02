@@ -1,0 +1,20 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'condition',
+  name: '条件渲染'
+}
+
+我们在JSX一节中讲到，JSX实际上就是JS代码，所以我们理所当然的可以用JS的方式控制JSX的渲染。
+
+让我们看一个简单的示例：
+
+<SrcReactEditor js={'/react/code/condition.jsx'}/>
+
+尝试修改`login`的值，你会看到渲染出了对应的文字。
+
+当然，我们不能真的靠手动改代码来控制状态，结合我们刚学过的state知识，在`App`中定义登录状态，并加上两个按钮来进行登入登出操作。
+
+<SrcReactEditor js={'/react/code/condition2.jsx'}/>
+
+同时，该示例还演示了使用JS三目运算符和逻辑运算符。你可以按照自己的喜好和团队的规范来选用。
