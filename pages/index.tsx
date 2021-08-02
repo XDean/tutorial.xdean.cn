@@ -2,14 +2,16 @@ import {DefaultLayout} from "../components/layout/DefaultLayout";
 import {AllTopics} from "../components/topics/topics";
 import Head from "next/head";
 import Link from 'next/link'
+import {useLocaleString} from "../components/util/locale";
 
 export default function Index() {
+  const localString = useLocaleString()
   return (
     <DefaultLayout topbar={{
-      title: 'XDean的教程',
+      title: localString.get('title'),
     }}>
       <Head>
-        <title>XDean的教程</title>
+        <title>{localString.get('title')}</title>
       </Head>
       <div className={'m-8'}>
         {AllTopics.map(t => (

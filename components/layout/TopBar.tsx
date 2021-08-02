@@ -5,7 +5,7 @@ import xdeanLogo from "../../public/favicon.ico";
 import homeLogo from "../../public/tutorial.png";
 import {ReactNode} from "react";
 import Link from 'next/link'
-import {LocaleNames} from "../util/locale";
+import {Locale, LocaleStrings, useLocaleString} from "../util/locale";
 import {useLocale} from "../util/hooks";
 import {useRouter} from "next/router";
 
@@ -14,7 +14,7 @@ export type TopBarProps = {
   left?: ReactNode
   title?: string
   right?: ReactNode
-  locales?: string[]
+  locales?: Locale[]
 }
 
 export const TopBar = (props: TopBarProps) => {
@@ -22,6 +22,7 @@ export const TopBar = (props: TopBarProps) => {
     locales
   } = props
   const locale = useLocale()
+  const localString = useLocaleString()
   const router = useRouter()
   return (
     <div className={'w-full shadow-md p-2 border-b bg-white z-10 flex flex-row items-center'}>
@@ -36,7 +37,7 @@ export const TopBar = (props: TopBarProps) => {
         </div>
       </div>
       <div className={'ml-2 text-3xl md:text-4xl'}>
-        {props.title || 'XDean的教程'}
+        {props.title || localString.get('title')}
       </div>
       <div className={'flex-grow w-0'}/>
       {locales && locales.length > 1 && (
@@ -46,7 +47,7 @@ export const TopBar = (props: TopBarProps) => {
           onChange={e => router.replace(router.asPath, undefined, {locale: e.target.value})}>
           {locales.map(e => (
             <option key={e} value={e}>
-              {LocaleNames[e]}
+              {LocaleStrings.locale[e]}
             </option>
           ))}
         </select>

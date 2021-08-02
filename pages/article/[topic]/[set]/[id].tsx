@@ -10,10 +10,12 @@ import clsx from "clsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 import {useLocale} from "../../../../components/util/hooks";
+import {useLocaleString} from "../../../../components/util/locale";
 
 export default function Index() {
   const router = useRouter()
   const locale = useLocale()
+  const localString = useLocaleString()
   const [topic, setTopic] = useState<Topic>()
   const [localArticleSets, setLocaleArticleSets] = useState<ArticleLocale>()
   const [articleSet, setArticleSet] = useState<ArticleSet>()
@@ -61,7 +63,7 @@ export default function Index() {
     return null
   }
 
-  const topicTitle = topic.title || `XDean的${topic.name}教程`
+  const topicTitle = topic.title || localString.get("topicTitle", topic.name)
 
   return (
     <DefaultLayout topbar={{

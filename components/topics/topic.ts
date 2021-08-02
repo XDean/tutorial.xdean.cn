@@ -1,16 +1,17 @@
 import {ComponentType} from "react";
+import {Locale} from "../util/locale";
 
 export type Topic = {
   id: string
   name: string
-  title?: string // default is 'XDean的{name}教程'
+  title?: string
   Icon: ComponentType
   draft?: boolean
   articles: ArticleLocale[]
 }
 
 export type ArticleLocale = {
-  locale?: string
+  locale?: Locale
   sets: ArticleSet[]
 }
 
