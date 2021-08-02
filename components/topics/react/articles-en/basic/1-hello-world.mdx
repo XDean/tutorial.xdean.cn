@@ -5,13 +5,18 @@ export const meta = {
   name: 'Hello World'
 }
 
-`Hello World`的示例已经在上一节中展示过，其实这短短的几行代码，已经展示了React最核心的功能。
+We have seen the  `Hello World` example in last chapter.
+It only has few lines, but in fact, it has shown the core function about React.
 
 <SrcReactEditor js={'/react/code/hello-world.jsx'} css={'/react/code/hello-world.css'}/>
 
-React只做一件事，那就是渲染(render)组件。
+React only do one thing: RENDER.
 
-我们调用`ReactDOM.render`方法将React组件渲染到目标元素上。
-而`App`就是一个最简单的React组件。
+We call `ReactDOM.render` to render React component onto target DOM element.
+The `App` variable in example above is the simplest React component.
 
-这里你会发现，与普通JS不同的是，我们在脚本中直接写入了`<h1>`这样的HTML标签，这是拓展的JSX语法，我们将在下一节介绍。
+You may find the JS code is not normal.
+We write `<h1/>` directly in Javascript code.
+It looks like HTML, but it's not.
+
+It is JSX, which is our next chapter's topic.

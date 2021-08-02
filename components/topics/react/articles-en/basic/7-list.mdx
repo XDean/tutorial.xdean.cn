@@ -2,23 +2,27 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'list',
-  name: '列表渲染'
+  name: 'List Render'
 }
 
-上一节我们学习了条件渲染，另一个常见的情况是，我们要渲染一组组件。
+We have learned conditional render in last chapter.
+Another normal condition is to render a series component.
 
-让我们回头看看在组件一节中用过的示例：
+Let's look at the example we used in the component chapter:
 
 <SrcReactEditor js={'/react/code/component3.jsx'}/>
 
-显然，我们不能有多少个人就写多少个`<Welcome/>`。
+Obviously, we can't write `<Welcome/>` for every person.
 
-如果给定一个JS数组，包含了所有人的信息，我们可以直接在数组上运算出JSX元素。
+So we can use list render here.
+
+Suppose we have an array object with all people's info.
+We can perform `map` on this array to calculate all JSX elements.
 
 <SrcReactEditor js={'/react/code/list.jsx'}/>
 
-值得注意的是，在`Welcome`上我们指定了属性`key`。
-如果不指定`key`，在开发模式下会受到警告`a key should be provided for list items`。
+It is worth noting that we specified the attribute `key` on `Welcome`.
+If you do not specify `key`, you will receive a warning `a key should be provided for list items` in development mode.
 
-`key`的作用是让React在渲染时可以更准确地识别哪些元素变化了，从而降低负载。
-在使用列表渲染时必须要指定`key`，并且兄弟节点之间`key`是唯一地。
+The function of `key` is to allow React to more accurately identify which elements have changed during rendering, thereby reducing the load.
+When using list render, you must specify the `key`, and the `key` between sibling nodes is unique.

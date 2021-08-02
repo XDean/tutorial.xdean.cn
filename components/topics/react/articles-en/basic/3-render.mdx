@@ -2,23 +2,29 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'render',
-  name: '渲染 Render'
+  name: 'Render'
 }
 
-上一节讲到，我们可以在JSX中用便捷的标签语法定义React元素。
+We have learned how to use JSX syntax to define React element in previous chapter.
 
-React元素并不是浏览器的DOM元素，而是Javascript对象，创建它们的开销远小于DOM元素。
-而React的工作就是把React元素渲染成DOM元素。
-并且在此过程中，React会比较元素的diff，并进行最小化的更新，而非重建整个DOM。
+React element is not DOM element, it is JS object.
+The creation cost is much smaller than DOM element.
 
-下面是一个最简化的例子，调用`ReactDOM.render`方法就可以把React元素渲染到目标DOM元素上：
+The core work of React is to render React element as DOM element.
+
+In the process, React will first make a diff between current element tree and previous one.
+It will perform minimal update instead of rebuilding the entire DOM tree.
+
+Below is a simplest example to show how to use `ReactDOM.render` to render React element.
 
 <SrcReactEditor js={'/react/code/render.jsx'}/>
 
-同样的，我们再来回看 `Hello World` 的例子，我们通过`render`方法将元素`<App/>`渲染到了目标DOM上。
+At the same time, let's recall the `Hello World` example.
+
+We use `ReactDOM.render` to render `<App/>` element.
 
 <SrcReactEditor js={'/react/code/hello-world.jsx'}/>
 
-但是，你或许也注意到了，不同于普通的HTML标签(例如`h1`)，标签`App`是我们自己的定义的。
+Well, you may have noticed that unlike built-in HTML (such as `h1`), `App` tag defined by ourselves.
 
-这里的`App`就是一个最简单的React组件，关于组件的知识会在后面的章节学习到。
+The `App` is a simplest **React Component**. We will learn React Component in later chapter.

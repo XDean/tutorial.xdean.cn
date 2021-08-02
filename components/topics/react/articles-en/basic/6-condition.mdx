@@ -2,19 +2,24 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'condition',
-  name: '条件渲染'
+  name: 'Conditional Render'
 }
 
-我们在JSX一节中讲到，JSX实际上就是JS代码，所以我们理所当然的可以用JS的方式控制JSX的渲染。
+As we mentioned in the JSX section, JSX is actually JS code.
+So of course we can use JS to control the rendering of JSX.
 
-让我们看一个简单的示例：
+Let's see a simple example:
 
 <SrcReactEditor js={'/react/code/condition.jsx'}/>
 
-尝试修改`login`的值，你会看到渲染出了对应的文字。
+Try to modify `login`. You will see different message shown.
 
-当然，我们不能真的靠手动改代码来控制状态，结合我们刚学过的state知识，在`App`中定义登录状态，并加上两个按钮来进行登入登出操作。
+Well, we can't control the login state manually.
+We should define a `login` state in our component.
+The knowledge about state will in State chapter.
+
+Now we add a state to control and add two button to login/logout
 
 <SrcReactEditor js={'/react/code/condition2.jsx'}/>
 
-同时，该示例还演示了使用JS三目运算符和逻辑运算符。你可以按照自己的喜好和团队的规范来选用。
+At the same time, the example shows how to use JS ternary operators and logical operators.

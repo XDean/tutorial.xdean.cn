@@ -5,14 +5,16 @@ export const meta = {
   name: 'JSX',
 }
 
-还是我们熟悉的`Hello World`：
+Let's take a look into `Hello World` again.
 
 <SrcReactEditor js={'/react/code/hello-world.jsx'}/>
 
-我们似乎直接在JS脚本中写了HTML。
-然而这些代码既不是HTML也不是字符串。
+It seems we write "HTML" directly in Javascript, but in fact it is not HTML, neither string literal.
 
-这其实是JSX拓展语法。它允许我们在JS代码中写入类似于HTML的代码，实际上它们会被转换成React元素对象。例如：
+It is JSX, a syntax extension to JavaScript.
+It allows us to write HTML-like code in JavaScript.
+Then it will transfer them as React element when compiled.
+Such as:
 
 ```jsx
 const App = () => (
@@ -21,7 +23,7 @@ const App = () => (
   </h1>
 );
 
-//会变成
+// will transfered to
 
 const App = () => React.createElement(
   'h1',
@@ -30,13 +32,13 @@ const App = () => React.createElement(
 );
 ```
 
-关于React元素对象的细节将会在下一节讲到。
+With JSX, it is very convenient to write UI code in JavaScript.
+Because all the things is in JavaScript, we can insert JavaScript in JSX tag.
+We need use `{}` to wrap JavaScript content, it can be inserted into attribute/content.
 
-有了JSX，我们可以方便的在JS里写UI代码。同时，因为本质还是JS，我们可以在JSX里插入JS代码段。
-只需要用大括号`{}`框住，可以在属性或是内容里插入JS，事件处理函数也可以直接插入其中。
 
 <SrcReactEditor js={'/react/code/jsx.jsx'}/>
 
-另一方面，JSX表达式本身也可以作为值使用，无论是作为参数传递还是作为值返回。
+In another side, JSX tag itself is JavaScript value. It can be used as parameter or return value.
 
 <SrcReactEditor js={'/react/code/jsx2.jsx'}/>

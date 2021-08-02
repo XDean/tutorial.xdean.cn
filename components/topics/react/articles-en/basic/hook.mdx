@@ -2,25 +2,25 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'hook',
-  name: '钩子 Hook'
+  name: 'Hook'
 }
 
-敏锐的你可能发现，前几节学习的`useEffect`和`useState`的名称都以`use`开头。
-这些以`use`开头的API被称为React Hook，是React v16.8引入的新特性。
-在此之前，React组件多是用类`class`来定义。
+You may have aware that the names of `useEffect` and `useState` studied in the previous sections are all begin with `use`.
+These APIs starting with `use` are called **React Hooks**, which are new features introduced in React v16.8.
+Prior to this, React components mostly defined with class.
 
-**本教程不会涉及任何关于class component的知识。Hook是React的首选方法。**
+**This tutorial will not involve any knowledge about class component. Hook is React's preferred way now. **
 
-所谓Hooks，其实就是一个函数，它们满足两个约束
+The so-called Hooks are actually a function, they satisfy two constraints
 
-- 只在React函数组件内调用
-- 必须保证每次渲染时组件调用同样的Hook
+- Can only call within React function components
+- Component must call same hooks in every rendering
 
-反例：
+Counterexample：
 
 ```jsx
 function fetchUser() {
-  React.useEffect(() => ...) // 错误，Hook只能在React函数组件内调用
+  React.useEffect(() => ...) // WRONG，Hook only can be used in React Function Component
   return fetch(...)
 }
 
@@ -28,31 +28,30 @@ const App = ({login}) => {
   if (!login) {
     return 'you are not login'
   }
-  const [input, setInput] = React.useState('') // 错误，不能在分支中调用，否则多次渲染时hook不一致
+  const [input, setInput] = React.useState('') // WRONG, can not use in branch, or it will be diffrent in two renderings
   return (
     ...
   )
 }
 ```
 
-在前面的章节，我们学习了`useState`和`useEffect`，这将是我们最常打交道的两个Hook。
-除此以外，React还定义了一些Hook，我们将在接下来的章节介绍常用的几个。
+In the previous chapters, we learned `useState` and `useEffect`, which are the most used ones.
+React also defines some other hooks, we will introduce a few commonly used in the following chapters.
 
-## 自定义Hook
+## Custom Hook
 
-除了React提供的Hook，我们还可以自定义Hook来提炼公用的逻辑。
-创建自定义钩子就是定义一个函数，名称以`use`开头，在函数内部可以调用其他Hook。
+In addition to the Hook provided by React, we can also customize the Hook to re-use common logic.
+To create a custom hook is to define a function whose name starts with `use`, and other hooks can be called inside the function.
 
-你是否还记得在上一节，我们已经完成了一个debounce功能。
-现在，我们可以把他提炼为新的`useDebounce`钩子，当我们再需要debounce功能时，就可以很方便地调用自定义钩子了。
+Do you remember that in the previous section, we have completed a debounce function.
+Now, we can extract a new `useDebounce` hook from it.
+When we need the debounce function, we can use the custom hook instead of write the logic again.
 
 <SrcReactEditor js={'/react/code/hook.jsx'}/>
 
-在上一节，我们还留了一个思考题，如何让`useEffect`在第一次渲染时不调用。
-其实只需要结合`useState`和`useEffect`就可以做到这个效果了。
-
-示例如下：
+In the previous section, we also left a question about how to prevent `useEffect` from being called in the first rendering.
+We can combine `useState` and `useEffect` to implement it.
 
 <SrcReactEditor js={'/react/code/hook2.jsx'}/>
 
-现在，控制台不会在第一次渲染时打印`count:0`了。
+Now it will not print `count:0` at the first time

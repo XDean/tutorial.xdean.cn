@@ -2,30 +2,50 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'introduce',
-  name: '教程介绍',
+  name: 'Introduce',
 }
 
-## 关于React
+## About React
 
-React是一个用于构建用户界面的Javascript库。
-React是当下最流行的前端框架之一。
+React is a JavaScript library for building user interfaces.
 
-## 关于本文档
+React is one of the most popular frontend framework today.
 
-本文档主要参考[官方文档](https://zh-hans.reactjs.org/docs/getting-started.html)，并提供交互式代码编辑器帮助学习。
+## Why this Tutorial
 
-要阅读本文档，你需要首先了解基本的HTML，JS，CSS知识。
+[React official doc][react-doc] was written a few years ago, which is out of date now.
 
-## 关于代码编辑器
+React team is now planning [write a new doc][react-new-doc-issue] in next major release.
 
-一个最简单的 Hello World 示例如下：
+> Over the next months, we're planning to rebuild our website with fresh content!
+> <br/>
+> Since Hooks have become increasingly popular in the React community,
+> we have heard from confused learners as well as industry trainers asking why the docs are still so class component-centric.
+> Additionally, while more and more educational materials for React are being created every day,
+> there are still things not being taught because we have failed to explain them well.
+> <br/>
+> We want to make reactjs.org the best place to grok React.
+> We want to be there with you from the moment you make your first component,
+> to well into your career as your React knowledge deepens and advances.
+
+This document could be a good alternative before the new doc.
+It will focus on Hooks API and help you understand core React **with online examples**.
+
+To read this document, ensure you have basic knowledge about HTML/JS/CSS.
+
+## About Online Code Editor
+
+Below is a simple `Hello World` example:
 
 <SrcReactEditor js={'/react/code/hello-world.jsx'} css={'/react/code/hello-world.css'}/>
 
 <p/>
 
-如你所见，我们成功地渲染出了蓝色的 `Hello World`。
+You can see we render a blue 'Hello World' in the right preview pane.
 
-在代码编辑器中，你只需要将组件渲染到`id=root`的节点上，结果就会显示在右侧预览框内。
+In the code editor, you should render your component into the node whose `id=root`.
 
-现在，你可以开始学习React。
+Now, you can start your React learning journey.
+
+[react-doc]: https://zh-hans.reactjs.org/docs/getting-started.html
+[react-new-doc-issue]: https://github.com/reactjs/reactjs.org/issues/3308

@@ -2,35 +2,39 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'component',
-  name: '组件 Component'
+  name: 'Component'
 }
 
-所谓组件，事实上就是一个JS函数，接受一组入参(被称为`props`)，然后返回React元素。
+The so-called Component is actually a JS function.
+It accepts one input parameter(called `props`), and return React element.
 
-组件可以直接当作标签在JSX中使用，这使得我们重用代码非常的方便。
+Component can be used as JSX tag. It will help us to re-use UI code.
 
-## 定义组件
+## Define Component
 
-定义组件的方式我们已经在历久弥新的`Hello World`示例中见到过了。
+The way to define components has already been seen in the time-honored `Hello World` example.
 
-当然，你也可以不用箭头函数，直接定义普通的`function`函数。在下面的代码框内试一试。
+Well, you can define normal `function` instead of arrow function. Try in the editor below.
 
 <SrcReactEditor js={'/react/code/component.jsx'}/>
 
-## 属性 Props
+## Component Properties
 
-前面的例子里，我们的组件都没有接收任何入参，那么让我们来看看带有参数的例子
+In the previous examples, our component did not receive any input parameters.
+So let's take a look at example with input parameter.
 
 <SrcReactEditor js={'/react/code/component2.jsx'}/>
 
-如你所见，在JSX中，我们可以以attribute的形式给组件传入`props`。
+As you cna see, in JSX tag, we can pass `props` to component by attribute.
 
-**需要注意的是**，组件一定是一个纯函数，即组件的属性`props`是不可变的。
-属性由外部传给组件，组件可以控制的应该是它的状态，即`state`，这将会在下节学习。
+**Note**, the component must be a pure function, that is, the property `props` is immutable.
+If you want to control your component, you should use `state`, which will learn in later chapter.
 
-## 重用
+## Reuse
 
-如前所述，组件使得重用非常容易。下面的例子就展示了对`Welcome`组件的重用
+As we said before, component make re-use very simple.
+
+Below example shows how to re-use `Welcome` component.
 
 <SrcReactEditor js={'/react/code/component3.jsx'}/>
 

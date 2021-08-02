@@ -2,18 +2,18 @@ import {SrcReactEditor} from "../../editor/SrcReactEditor";
 
 export const meta = {
   id: 'controlled',
-  name: '受控组件'
+  name: 'Controlled Component'
 }
 
-前面的章节我们的例子主要是简单的文本内容，没有什么状态。
+Our examples in the previous chapters are mainly simple text content without state.
 
-现在让我们来考虑一个简单需求
+Now let's consider a simple requirement
 
-- 一个可以输入文字的文本框
-- 一个确认按钮，按下时弹出alert显示文本内容
-- 一个清楚按钮，按下时清除文本
+- A text box where you can enter text
+- A confirmation button, when pressed, an alert will pop up to display the text content
+- A clear button to clear the text when pressed
 
-如果时用传统的HTML来写，大概会形如
+If you use simple HTML/JS to implement, it will probably look like
 
 ```jsx
 <input type="text" id="text"/>
@@ -28,56 +28,70 @@ confirm.onclick = () => alert(text.value)
 clear.onclick = () => text.value = ''
 ```
 
-我们需要获取对应的DOM元素对象，然后得到文本内容。
+We need to get the corresponding DOM element object, and then get the text content.
 
-在React里，你当然也可以采用同样的方法，具体的方法在之后的章节学习`useRef`会提到。
+In React, of course, you can also use the same method.
+The specific method will be mentioned in the later chapters of learning `useRef`,
+but it's not the preferred method.
 
-但这并不是首选的方法。
-
-更多的时候，我们会采用受控组件的形式，来自己控制组件的。
+More often, we will use **Controlled Component** to manage our components.
 
 <SrcReactEditor js={'/react/code/controlled.jsx'}/>
 
-我们设置了`input`的`value`属性为`content`，所以当`content`变化时，`input`的值也会改变。
+We set the `value` attribute of `input` to `content`, so when `content` changes,
+the value of `input` will also change.
 
-下面的两个按钮则只需要面向`content`状态，而不需要和`input`接触。三个组件之间通过`content`联系了起来。
+The two buttons only need to face the `content` state, and don't need to be in contact with the `input`.
+The three components connect by `content` state.
 
-像本例中的`input`一样的组件被称为**受控组件**，其状态受到父组件控制的组件。
-这样做的好处是，在需要与组件状态进行交互时，不需要通过命令来改变，而只需要改变数据。
+Components like `input` in this example called **controlled components**, their state controlled by the parent component.
+The advantage is that when you need to interact with the component state, you only need to change the state.
 
-**这其实也是React响应式思想的体现。**
+**This is actually React's responsive thinking. **
 
-## 状态提升
+## Lifting State Up
 
-除了默认的HTML标签，自定义组件许多时候也需要受控。这种模式又被称为状态提升。
+In addition to the built-in HTML tags, custom components often need to be controlled too.
+This pattern called **lifting state up**.
 
-考虑现在我们有一个温度输入的组件，可以选择单位是摄氏度或者华氏度。
+Consider that we have a temperature input component.
+We can choose the unit to be Celsius or Fahrenheit.
 
 <SrcReactEditor js={'/react/code/controlled2.jsx'}/>
 
-现在我们的需求是一个自动温度转换器，
+Now our requirement is an automatic temperature converter,
 
-理所当然的，我们在`App`里加入了两个输入框
+We add two inputs to `App` component.
 
 <SrcReactEditor js={'/react/code/controlled2-2.jsx'}/>
 
-但是很可惜，两个文本框并没有自动转换，因为它们的状态由自己管理，不受外部控制。
+Unfortunately, the two text boxes not automatically converted.
+Because their state managed by themselves and not controlled by outsiders.
 
-这个时候，我们就需要把组件变成**受控组件**，换句话也可以说把组件的**状态提升**到父组件。
+At this time, we need to turn the component into a **controlled component**.
+In other words, we **lift the state up** to the parent component.
 
 <SrcReactEditor js={'/react/code/controlled2-3.jsx'}/>
 
-## 小结
+## Summary
 
-**受控组件**是指状态收到父组件控制的组件，利用受控组件，业务逻辑可以关注在状态上而非UI元素。
+**Controlled Component** refers to a component whose state controlled by a parent component.
+With controlled components, business logic can focus on the state instead of UI elements.
 
-对于自定义组件，我们可以主动把它们变换成受控组件，使得父组件可以关联子组件的状态。这种模式被称为**状态提升**
+For custom components, we can actively transform them into controlled components.
+So that the parent component can associate the state of the child component.
+This mode called **Lifting State Up**
 
-## 思考
+## Thinking
 
-但是，状态提升也并非银弹，想象我们的UI组件逐渐复杂，从顶层组件到底层组件经历了许多层自定义组件的嵌套。
+However, controlled component is not a silver bullet.
 
-现在再利用状态提升将状态汇聚到顶层组件，且不说逻辑混杂，光是一层层的属性传递就已经很让人难受了。
+Imagine that our UI components are gradually becoming more complex.
+From the top-level components to the bottom-level components,
+we have experienced many layers of nesting of custom components.
+
+So we use controlled component to converge the state to the top-level components.
+But things are not going in a good direction, we need pass data in each level.
 
 ```jsx
 const Avatar = () => (
@@ -106,4 +120,4 @@ const App = () => (
 )
 ```
 
-如何处理这种情况，我们会在后面的章节学习到。
+We will learn how to deal with this situation in later chapters.
