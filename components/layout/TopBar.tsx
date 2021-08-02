@@ -5,14 +5,24 @@ import xdeanLogo from "../../public/favicon.ico";
 import homeLogo from "../../public/tutorial.png";
 import {ReactNode} from "react";
 import Link from 'next/link'
+import {LocaleNames} from "../util/locale";
+import {useLocale} from "../util/hooks";
+import {useRouter} from "next/router";
+
 
 export type TopBarProps = {
   left?: ReactNode
   title?: string
   right?: ReactNode
+  locales?: string[]
 }
 
 export const TopBar = (props: TopBarProps) => {
+  const {
+    locales
+  } = props
+  const locale = useLocale()
+  const router = useRouter()
   return (
     <div className={'w-full shadow-md p-2 border-b bg-white z-10 flex flex-row items-center'}>
       <div className={'flex flex-row items-center justify-center'}>
@@ -29,6 +39,18 @@ export const TopBar = (props: TopBarProps) => {
         {props.title || 'XDean的教程'}
       </div>
       <div className={'flex-grow w-0'}/>
+      {locales && locales.length > 1 && (
+        <select
+          className={'ring-1 rounded mr-4 hidden md:block'}
+          value={locale}
+          onChange={e => router.replace(router.asPath, undefined, {locale: e.target.value})}>
+          {locales.map(e => (
+            <option key={e} value={e}>
+              {LocaleNames[e]}
+            </option>
+          ))}
+        </select>
+      )}
       <div className={'flex-row items-center hidden md:flex'}>
         {props.right}
         <a target={'_blank'}
