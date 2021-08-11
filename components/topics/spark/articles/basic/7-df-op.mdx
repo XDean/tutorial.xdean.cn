@@ -64,11 +64,7 @@ df.show(5, truncate=30)
 df.show(truncate=False)
 ```
 
-## DataFrame操作符
-
-_如果你曾经学习使用过pandas或者SQL，那么DataFrame的API会非常亲切，甚至无需学习就可以猜测出许多API_
-
-### Column 列
+## Column 列
 
 DataFrame的所有操作都是基于列的，这与RDD基于值的操作非常不一样。
 
@@ -82,22 +78,24 @@ df.filter(df.Age < 10).show(5)
 
 <Details title={'显示输出'}>
 
-```text
-+-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-|PassengerId|Survived|Pclass|                Name|   Sex| Age|SibSp|Parch|          Ticket|   Fare|Cabin|Embarked|
-+-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-|          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|       A/5 21171|   7.25| null|       S|
-|          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
-|          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| null|       S|
-|          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
-|          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| null|       S|
-+-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-```
+  ```text
+  +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+  |PassengerId|Survived|Pclass|                Name|   Sex| Age|SibSp|Parch|          Ticket|   Fare|Cabin|Embarked|
+  +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+  |          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|       A/5 21171|   7.25| null|       S|
+  |          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
+  |          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| null|       S|
+  |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
+  |          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| null|       S|
+  +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+  ```
 
 </Details>
 
 
 可以看到，RDD对每一个值判断是否大于10，而DF直接对列进行运算。这里的`df.Age`就是`Age`列。
+
+### 获取列
 
 获得列(Column对象)的方式有多种
 
@@ -108,6 +106,38 @@ F.col('Age')  # 通过列名构造，需要 import pyspark.sql.functions as F
 'Age'         # 直接使用列名，这不是一个列对象，不能进行运算
 ```
 
+### 列函数
+
+除了常见的数值/逻辑运算，例如大于/小于/等于/加减乘除，Spark还预制了一系列列运算函数。
+你可以这样导入`from pyspark.sql import functions as F`。
+
+其中包括了丰富的数值运算，统计运算和字符串运算等。
+
+```python
+df.select(F.sqrt(df.Fare)).show(5)
+```
+
+<Details title={'显示输出'}>
+
+```text
++------------------+
+|        SQRT(Fare)|
++------------------+
+| 2.692582403567252|
+| 8.442943799410251|
+|2.8151376520518494|
+| 7.286974680894672|
+|2.8372521918222215|
++------------------+
+only showing top 5 rows
+```
+
+</Details>
+
+## DataFrame操作符
+
+_如果你曾经学习使用过pandas或者SQL，那么DataFrame的API会非常亲切，甚至无需学习就可以猜测出许多API_
+
 ### Select 选中
 
 - 使用`select`操作可以选中一些列
@@ -116,6 +146,79 @@ F.col('Age')  # 通过列名构造，需要 import pyspark.sql.functions as F
 
 ```python
 df.select('Name', 'Sex').show(5)
+df[[df.Age, df.Sex]].show(5)
+```
+
+<Details title={'显示输出'}>
+
+```text
++----+------+
+| Age|   Sex|
++----+------+
+|22.0|  male|
+|38.0|female|
+|26.0|female|
+|35.0|female|
+|35.0|  male|
++----+------+
+only showing top 5 rows
+```
+
+</Details>
+
+### Filter 过滤
+
+- 使用`filter`操作符可以按条件过滤行
+- `df[<condition>]`是`df.filter(<condition>)`的快捷方式
+
+```python
+df.filter('Age < 10').count()
+df[df.Age < 10].count()
+// 62
+```
+
+### Group/Aggregate 分组/聚合
+
+- 使用`groupby`操作符可以将数据分组
+- 使用`agg`可以对分组进行聚合运算，如果未分组则对所有行聚合
+
+```python
+from pyspark.sql import functions as F
+
+df.agg(F.min(df.Age), F.max(df.Age)).show()
+df.groupby('Survived')\
+  .agg(F.mean('Fare'))\
+  .show()
 ```
 
 
+<Details title={'显示输出'}>
+
+```text
++--------+--------+
+|min(Age)|max(Age)|
++--------+--------+
+|    0.42|    80.0|
++--------+--------+
+
++--------+------------------+
+|Survived|         avg(Fare)|
++--------+------------------+
+|       1| 48.39540760233917|
+|       0|22.117886885245877|
++--------+------------------+
+```
+
+</Details>
+
+### 其他
+
+当然，除了以上的几种操作，Spark DataFrame还有更多实用操作符，包括但不限于
+
+- 排序 `sort`
+- 交并补集 `intersect/union/subtract`
+- 左右内联 `join`
+- 统计 `stat`
+- Null Handling `na`
+
+这里不再一一介绍，当你理解了列运算之后，各种API只需要简单看一眼doc就可以上手使用了。

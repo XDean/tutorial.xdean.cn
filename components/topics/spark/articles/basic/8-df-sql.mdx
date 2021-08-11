@@ -1,0 +1,52 @@
+export const meta = {
+  id: 'df-sql',
+  name: 'DataFrame SQL',
+}
+
+SQL作为数据科学领域的标准查询语言，有着大量的群众基础。
+
+其实你或许已经察觉到了DataFrame和SQL Table非常相似，他们都以行列的形式组织数据。
+事实上DataFrame操作符都为SQL习惯提供了对应的别名，例如`filter -> where`, `sort -> orderBy`。
+这些别名使得习惯SQL的用户在使用时能够更加符合直觉。
+
+更进一步地，Spark还可以使用纯SQL语句的方式来操作DataFrame。
+只需要使用`spark.sql`方法就可以直接执行SQL语句。
+
+```python
+spark.sql('SELECT CURRENT_TIMESTAMP()').show(truncate=False)
+
+// +-----------------------+
+// |current_timestamp()    |
+// +-----------------------+
+// |2021-08-09 11:06:51.407|
+// +-----------------------+
+```
+
+然而现在我们的数据库里还没有表。所以我们第一步要做的就是创建SQL Table。
+通过`DataFrame.createOrReplaceTempView`可以把DataFrame注册为表。
+
+我们仍然以上一节`titanic`数据为例，下面的SQL展示了船舱等级和存活率的关系。
+
+```python
+df.createOrReplaceTempView('titanic')
+spark.sql('''
+SELECT
+  Pclass,
+  CONCAT(CAST((SUM(Survived) / COUNT(1) * 100) AS INT), '%') AS `Survival Rate`
+FROM titanic
+GROUP BY Pclass
+ORDER BY Pclass
+''').show()
+```
+
+结果为
+
+```text
++------+-------------+
+|Pclass|Survival Rate|
++------+-------------+
+|     1|          62%|
+|     2|          47%|
+|     3|          24%|
++------+-------------+
+```
