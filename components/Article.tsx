@@ -4,6 +4,7 @@ import Link from 'next/link'
 import {VisitorTag} from "./util/VisitorTag";
 import css from './Article.module.css'
 import {ArticleData, ArticleSet, Topic} from "./topics/topic";
+import {useLocaleString} from "./util/locale";
 
 type Props = {
   topic: Topic
@@ -12,6 +13,7 @@ type Props = {
 }
 
 export const Article = (props: Props) => {
+  const localeString = useLocaleString()
   const {prev, next} = useMemo(() => {
     const idx = props.articleSet.articles.indexOf(props.article)
     return {
@@ -30,17 +32,17 @@ export const Article = (props: Props) => {
         </h1>
         <props.article.Component/>
       </article>
-      <div className={'flex flex-row justify-center pb-4 pt-8'}>
-        <Link href={`/article/${props.topic.id}/${props.articleSet.id}/${prev?.meta.id}`}>
+      <div className={'flex flex-col md:flex-row justify-center pb-4 pt-8'}>
+        {prev && <Link href={`/article/${props.topic.id}/${props.articleSet.id}/${prev?.meta.id}`}>
           <div className={css.navButton}>
-            {prev && `上一节：${prev.meta.name}`}
+            {localeString.get('previousChapter')}：{prev.meta.name}
           </div>
-        </Link>
-        <Link href={`/article/${props.topic.id}/${props.articleSet.id}/${next?.meta.id}`}>
+        </Link>}
+        {next && <Link href={`/article/${props.topic.id}/${props.articleSet.id}/${next?.meta.id}`}>
           <div className={css.navButton}>
-            {next && `下一节：${next.meta.name}`}
+            {localeString.get('nextChapter')}：{next.meta.name}
           </div>
-        </Link>
+        </Link>}
       </div>
       <hr/>
       <GithubComment/>

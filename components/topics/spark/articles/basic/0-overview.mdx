@@ -9,7 +9,7 @@ export const meta = {
 
 ## 关于本教程
 
-- 本教程基于Spark v3.1.2, Python 3.6
+- 本教程基于Spark v3.1.2, Python 3.9.6, 命令行示例运行于PowerShell
 - 主要参考[Spark官方文档](https://spark.apache.org/docs/3.1.2/)
 - 示例代码主要使用Python，未来可能会添加Scala示例
 - 内容不包含集群的安装部署
@@ -39,11 +39,11 @@ Spark是用Scala编写的，需要安装Java。版本要求8或11。
 
 ```bash
 $ java -version
-java version "1.8.0_271"
-Java(TM) SE Runtime Environment (build 1.8.0_271-b09)
-Java HotSpot(TM) Client VM (build 25.271-b09, mixed mode, sharing)
+java version "1.8.0_162"
+Java(TM) SE Runtime Environment (build 1.8.0_162-b12)
+Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)
 
-$ echo $JAVA_HOME
+$ echo $env:JAVA_HOME
 C:\Users\dxu\coding\jdk\jdk-8u162-windows-x64
 ```
 
@@ -57,23 +57,66 @@ C:\Users\dxu\coding\jdk\jdk-8u162-windows-x64
 
 ```bash
 $ python --version
-Python 3.6.12
+Python 3.9.6
 ```
 
-Python安装完成后我们还要安装`pyspark`包
+Python安装完成后我们还要安装`pyspark`和`psutil`包
 
 ```bash
-pip install pyspark
+pip install pyspark[sql] psutil
+```
+
+为了让Spark可以发现Python，还需要设置`PYSPARK_PYTHON`和`PYSPARK_DRIVER_PYTHON`环境变量
+
+```bash
+$ echo $env:PYSPARK_PYTHON
+C:\Users\dxu\coding\python\pyspark-venv\Scripts\python.exe
+$ echo $env:PYSPARK_DRIVER_PYTHON
+C:\Users\dxu\coding\python\pyspark-venv\Scripts\python.exe
 ```
 
 ### Spark
+
+**单机模式的Spark不需要安装就可以直接执行，你可以选择忽略该步骤**
 
 [Spark 下载地址](http://spark.apache.org/downloads.html)
 
 <Image src={sparkDownload}/>
 
+解压完成后，设置`SPARK_HOME`环境变量。
 
-现在Spark已经成功安装，你可以开始学习Spark了！
+```bash
+$ echo $env:SPARK_HOME
+C:\Users\dxu\coding\spark\spark-3.1.2-bin-hadoop3.2
+```
+
+### PySpark命令行
+
+现在Spark已经成功安装，只需要运行`pyspark`就可以打开pyspark交互式命令行了。
+
+- 在你的python目录下已经有`pyspark`了
+- 如果你安装了Spark，则`$SPARK_HOME/bin/pyspark`亦可用
+
+```text
+$ pyspark
+Python 3.9.6 (tags/v3.9.6:db3ff76, Jun 28 2021, 15:26:21) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 3.1.2
+      /_/
+
+Using Python version 3.9.6 (tags/v3.9.6:db3ff76, Jun 28 2021 15:26:21)
+Spark context Web UI available at http://localhost:4040
+Spark context available as 'sc' (master = local[*], app id = local-1625727824820).
+SparkSession available as 'spark'.
+>>>
+```
 
 [jre-download]: https://www.oracle.com/java/technologies/javase-jre8-downloads.html
 [python-download]: https://www.python.org/downloads/

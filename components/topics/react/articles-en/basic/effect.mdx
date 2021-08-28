@@ -1,0 +1,112 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'effect',
+  name: 'useEffect'
+}
+
+In the previous sections we learned about component, and how to control state by using `useState`.
+
+Do you remember the example `Counter`. Now we have some new requirements.
+
+- Whenever the count changes, print the count in console
+
+A naive idea is to add a print statement in the `onClick` method.
+It will work, but it will cause us to make two changes in `count` and `clear`,
+which greatly increases the cost of maintenance.
+
+The correct way is to use `useEffect`. Let's see the example below
+
+<SrcReactEditor js={'/react/code/effect.jsx'}/>
+
+Press<kbd>F12</kbd>, then click the counter, see logs in console.
+
+As the name suggests, `useEffect` performs some side effects that are not directly related to UI rendering.
+The function passed in as a parameter will be called in every rendering.
+
+## Effect Dependencies
+
+It works well now, but we have another requirement.
+
+- Add a button to control the font size
+
+It's easy! We added a new state `big`.
+
+<SrcReactEditor js={'/react/code/effect2.jsx'}/>
+
+Looks good! But if you take a look into console.
+You will find something not expected.
+It will print log when we toggle font size.
+
+Now we need use the second parameter of `useEffect`, the dependency list.
+
+Dependency list is an array of object. Effect will only trigger when dependencies changed.
+
+Try to modify `useEffect` in above editor to add the second parameter.
+
+```javascript
+useEffect(() => console.log(`count: ${count}`), [count])
+```
+
+A special case is empty dependency list.
+It makes the effect only triggered when the component first time rendered (also called `mount`).
+
+Try to add following effect and see what happens.
+
+```javascript
+useEffect(() => console.log(`mount`), [])
+```
+
+## Cleanup
+
+In real use case, effect couldn't be simple print statement.
+It may be related to many external operations, such as browser API, server API, websocket and so on.
+These side effects may require a cleanup operation, otherwise it will cause errors or waste of resources.
+
+Now our counter has a new requirement.
+
+- Upload data to server. (In our example, we replaced it with a simple print statement)
+
+In order to reduce the load on the server, we hope it not to send data for every click,
+but only when there are no more clicks within 2 seconds.
+This is actually a common **debounce** feature in UI.
+
+Therefore, we performed the `setTimeout` operation in `useEffect`, as follows:
+
+```javascript
+React.useEffect(() => {
+  setTimeout(() => {
+    console.log(`send to server: ${count}`)
+  }, 2000)
+}, [count])
+```
+
+Well, it not works as expected.
+Every click will trigger a request with 2 seconds delay.
+What we have to do now is to remove the old side effects before the new ones.
+
+It is very simple in `useEffect`, you only need to return the clear function.
+The clear function will be executed when render becomes invalid (before next rendering or unmount).
+
+<SrcReactEditor js={'/react/code/effect3.jsx'}/>
+
+Now, click the button again and again. It will only send server request when you stop.
+
+## Summary
+
+`useEffect` is used to execute a side effect function, it receives two parameters
+
+1. Side effect function, this function has no parameters, it can return a cleanup function (`Destructor`)
+2. Dependency list (optional)
+
+- The side effect function will be executed every time component render.
+- The cleanup function will be executed when the render becomes invalid
+- If a dependency defined, the side effect will only be triggered when the dependencies change
+
+## Thinking
+
+After learning `useState` and `useEffect`, we can already customize many interesting functions.
+Consider the counter example above, we can extract a `useDebounce` function.
+
+Now, I want a `useEffectWithoutMount`,
+the side effect not triggered when it is mounted (that is, the first rendering), how to implement it?

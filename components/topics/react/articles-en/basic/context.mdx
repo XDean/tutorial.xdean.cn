@@ -1,0 +1,82 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'context',
+  name: 'useContext'
+}
+
+Context is a popular concept in the program world, which represents the state of the environment in which the program is running.
+In React, we can use `React.createContext` to create a context, and use `useContext` to get the context.
+
+Do you remember the question we left in the state promotion section,
+using Context we can solve the problem of multi-level state nesting and easily access the state provided by the parent component.
+
+## Create Context
+
+First, call `createContext` to create context.
+You need to pass a default value of the context.
+
+```jsx
+const MyContext = React.createContext(defaultValue)
+```
+
+## Apply Context
+
+Now we have the Context, we need add the `Context.Provider` tag to apply the context into component tree.
+
+```jsx
+const App = () => (
+  <MyContext.Provider value={...}>
+    ...
+  </MyContext>
+)
+```
+
+## Use Context
+
+After apply the context, child nodes can use the context by `useContext`
+
+```jsx
+const Child = () => {
+  const ctx = React.useContext(MyContext);
+  ...
+}
+```
+
+## Example
+
+<SrcReactEditor js={'/react/code/context.jsx'} css={'/react/code/context.css'}/>
+
+We define a theme context, which contains two color modes: `light` and `dark`.
+Try to change the `value` in the `ThemeContext.Provider` to `themes.dark`, you will see the color change.
+
+## Modify Context Value
+
+Of course, we can't modify the context by changing the code manually.
+We want to change the theme by click button.
+
+We can change the context value to be a state, and add a method to toggle the theme in the context.
+Then you can call the method in the context to toggle the theme in the child node.
+
+<SrcReactEditor js={'/react/code/context2.jsx'} css={'/react/code/context.css'}/>
+
+## Other Tips
+
+- Same context can be defined multiple times. The child component will get the closest context.
+- If the parent node does not define a context, the obtained context is the default value.
+- Different contexts can be applied at same time.
+
+Example about multi-context:
+
+```jsx
+const ThemeContext = React.createContext('light');
+const UserContext = React.createContext({name: 'Guest'});
+
+const App = () =>(
+  <ThemeContext.Provider value={'light'}>
+    <UserContext.Provider value={{name: 'xdean'}}>
+      <Layout/>
+    </UserContext.Provider>
+  </ThemeContext.Provider>
+)
+```

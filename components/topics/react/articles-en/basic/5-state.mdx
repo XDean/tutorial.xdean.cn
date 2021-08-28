@@ -1,0 +1,33 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'state',
+  name: 'useState'
+}
+
+In Component chapter, we said `props` is immutable. To manage internal state we should use `useState`.
+
+Let's see following Counter example
+
+<SrcReactEditor js={'/react/code/state.jsx'}/>
+
+`useState` accepts a parameter as the state's default value, or it can be left blank to be `undefined`.
+Then it returns an array containing two values
+
+1. The state's value, `count`
+2. The function to update the state, `setCount`
+
+We can call `setCount` to update count value.
+When state changed, React will re-render the component.
+
+## Update State
+
+You may have noticed that `setCount` can accept value (like `0`) or function (like `c => c + 1`) as parameter.
+
+When your update the state, if you want to use the original value of the state, you should not use it directly.
+The correct way is to use a function as a parameter, and the current value of the state will be used as an input parameter of the function.
+
+```js
+setCount(count + 1) // WRONG
+setCount(c => c + 1) // Correct
+```

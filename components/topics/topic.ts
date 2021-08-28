@@ -1,14 +1,18 @@
-import {TopBarProps} from "../layout/TopBar";
 import {ComponentType} from "react";
+import {Locale} from "../util/locale";
 
 export type Topic = {
   id: string
   name: string
-  title?: string // default is 'XDean的{name}教程'
+  title?: string
   Icon: ComponentType
   draft?: boolean
-  topbar?: TopBarProps
-  articles: ArticleSet[]
+  articles: ArticleLocale[]
+}
+
+export type ArticleLocale = {
+  locale?: Locale
+  sets: ArticleSet[]
 }
 
 export type ArticleSet = {
@@ -24,4 +28,13 @@ export type ArticleData = {
     name: string
     title?: string
   }
+}
+
+export function getLocaleArticleSets(t: Topic, locale?: string) {
+  for (const e of t.articles) {
+    if (e.locale === locale) {
+      return e
+    }
+  }
+  return t.articles[0]
 }

@@ -1,0 +1,40 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'component',
+  name: 'Component'
+}
+
+The so-called Component is actually a JS function.
+It accepts one input parameter(called `props`), and return React element.
+
+Component can be used as JSX tag. It will help us to re-use UI code.
+
+## Define Component
+
+The way to define components has already been seen in the time-honored `Hello World` example.
+
+Well, you can define normal `function` instead of arrow function. Try in the editor below.
+
+<SrcReactEditor js={'/react/code/component.jsx'}/>
+
+## Component Properties
+
+In the previous examples, our component did not receive any input parameters.
+So let's take a look at example with input parameter.
+
+<SrcReactEditor js={'/react/code/component2.jsx'}/>
+
+As you cna see, in JSX tag, we can pass `props` to component by attribute.
+
+**Note**, the component must be a pure function, that is, the property `props` is immutable.
+If you want to control your component, you should use `state`, which will learn in later chapter.
+
+## Reuse
+
+As we said before, component make re-use very simple.
+
+Below example shows how to re-use `Welcome` component.
+
+<SrcReactEditor js={'/react/code/component3.jsx'}/>
+

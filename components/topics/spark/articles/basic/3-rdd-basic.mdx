@@ -1,0 +1,113 @@
+export const meta = {
+  id: 'rdd-basic',
+  name: 'RDD基础',
+}
+
+## SparkContext
+
+开始使用RDD的第一个步骤，就是创建一个`SparkContext`，它封装了与Spark集群通信的细节。
+
+要创建SparkContext，首先需要创建一个`SparkConf`，它用于配置我们的应用。
+
+```python
+from pyspark import SparkContext, SparkConf
+
+conf = SparkConf().setMaster(master).set(xxx, xxx)
+sc = SparkContext(conf=conf)
+```
+
+`SparkConf`中可以配置所有的[应用属性][spark-app-props].
+其中特别的一项配置是`master`，它指明了应用要连接的Spark集群(或本地实例)。
+常见的master有以下几种:
+
+- `local`，创建本地Spark实例，其使用一个工作线程
+- `local[n]`，创建本地Spark实例，其使用n个工作线程
+- `local[*]`，创建本地Spark实例，其使用工作线程数量等同于机器core的数量
+- `spark://HOST:PORT`，连接到一个Spark Standalone集群
+- `k8s://HOST:PORT`，连接到K8S集群
+
+_* 更多master格式参见[官方文档][spark-master]_
+
+**注意**，如果你使用的是交互式命令行，则`sc`对象已经为你创建好，不需要手动创建。
+如果需要修改master或者配置，应当在调用`pyspark`命令时指定。
+
+## 创建RDD
+
+对于已经存在的数据对象，我们可以使用`sc.parallelize`将其转换成RDD对象。
+
+```python
+data = [1, 2, 3, 4, 5]
+r1 = sc.parallelize(data)
+```
+
+转换后，`rd`对象类型为RDD，即可以对它进行后续的分布式操作。
+
+对于并行集合，最重要的参数就是分区数(partition)。Spark会自动根据数据和集群来设置分区数，你也可以手动指定它。
+
+```python
+data = [1, 2, 3, 4, 5]
+r1 = sc.parallelize(data, 3)
+```
+
+更多的时候，数据是存储在外部的，包括本地磁盘，HDFS，HBase，Amazon S3等等。
+这时候就需要使用文件读取方法来创建RDD，这在`Hello World`示例中我们其实已经见过了。例如：
+
+```python
+r1 = sc.textFile('data.txt')
+```
+
+- 同样的，可以通过第二个参数指定分区数
+- 如果是读取本地文件，则必须要保证该文件可以在所有工作节点上被访问到
+- 基于文件的读取方法还支持读取目录/压缩文件/通配符
+
+```python
+r1 = sc.textFile('/my/directory')
+r2 = sc.textFile('/my/directory/*.txt')
+r3 = sc.textFile('/my/directory/*.gz')
+```
+
+## 保存RDD
+
+保存RDD到文件，只需要调用`saveAsXXX`方法，例如
+
+```python
+rdd.saveAsTextFile('my/directory/output.txt')
+```
+
+## 操作符 Operation
+
+如上节所述，RDD主要又两类操作符，Transformation和Action。前者将RDD转换成RDD，而后者将RDD转换为数值结果。
+因为Spark的计算是惰性的，所以只有在Action操作时才会触发计算。
+
+在这里，我们介绍几种常用的操作符。在Spark文档中详细地列出了所有的操作符，你可以前往查看：[Transformations][rdd-transformations]和[Actions][rdd-actions]。
+
+**注意**，所有名为`xxxByKey`的操作符要求元素的类型是一个键值对`(key, value)`。
+
+### Transformations
+
+1. map，将元素一一映射为新的元素，如`rdd.map(lambda e: e + 1)`
+2. filter，过滤不符合条件的元素，如`rdd.filter(lambda e: len(e) > 5)`
+3. flatMap，将一个元素映射为多个元素(数组)，如`rdd.flatMap(lambda e: [e+1, e+2])`
+4. mapPartitions，功能和`map`相同，但是每次处理一个分区而非一个元素，如`rdd.map(lambda p: [e+1 for e in p])`
+5. union/intersection，与另一个RDD做并(交)集
+6. groupByKey，`(K, V) => (K, V[])`，按键值进行分组操作(如果分组是为了reduce或聚合，应当直接使用`reduceByKey`或者`aggregateByKey`)
+7. reduceByKey，`(K, V) => (K, V)`，按键值进行reduce操作，需要给定聚合函数
+8. aggregateByKey，`(K, V) => (K, U)`，按键值进行聚合操作，需要给定零值，聚合函数，组合函数
+9. sortByKey，按键值进行排序
+10. repartition，重新对RDD进行分区，这会导致混洗
+
+### Actions
+
+1. reduce/aggregate，对所有元素进行reduce/聚合操作
+2. collect，返回所有元素的集合，**注意**，使用前应减小数据集大小，否则很容易造成OOM，建议使用`take`
+3. count，返回元素数量
+4. take，返回前`n`个元素
+5. foreach，对每个元素进行操作，**注意**，该调用是在每个工作节点进行的。如有可能，应尽可能使用reduce/aggregate
+6. saveAsXXX，所有保存操作也是Action
+
+
+
+[spark-master]: https://spark.apache.org/docs/3.0.0/submitting-applications.html#master-urls
+[spark-app-props]: http://spark.apache.org/docs/latest/configuration.html#application-properties
+[rdd-transformations]: http://spark.apache.org/docs/latest/rdd-programming-guide.html#transformations
+[rdd-actions]: http://spark.apache.org/docs/latest/rdd-programming-guide.html#actions

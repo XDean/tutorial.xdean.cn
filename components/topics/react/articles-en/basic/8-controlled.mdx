@@ -1,0 +1,123 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'controlled',
+  name: 'Controlled Component'
+}
+
+Our examples in the previous chapters are mainly simple text content without state.
+
+Now let's consider a simple requirement
+
+- A text box where you can enter text
+- A confirmation button, when pressed, an alert will pop up to display the text content
+- A clear button to clear the text when pressed
+
+If you use simple HTML/JS to implement, it will probably look like
+
+```jsx
+<input type="text" id="text"/>
+<button id="confirm">confirm</button>
+<button id="clear">clear</button>
+
+const text = document.getElementById('text')
+const confirm = document.getElementById('confirm')
+const clear = document.getElementById('clear')
+
+confirm.onclick = () => alert(text.value)
+clear.onclick = () => text.value = ''
+```
+
+We need to get the corresponding DOM element object, and then get the text content.
+
+In React, of course, you can also use the same method.
+The specific method will be mentioned in the later chapters of learning `useRef`,
+but it's not the preferred method.
+
+More often, we will use **Controlled Component** to manage our components.
+
+<SrcReactEditor js={'/react/code/controlled.jsx'}/>
+
+We set the `value` attribute of `input` to `content`, so when `content` changes,
+the value of `input` will also change.
+
+The two buttons only need to face the `content` state, and don't need to be in contact with the `input`.
+The three components connect by `content` state.
+
+Components like `input` in this example called **controlled components**, their state controlled by the parent component.
+The advantage is that when you need to interact with the component state, you only need to change the state.
+
+**This is actually React's responsive thinking. **
+
+## Lifting State Up
+
+In addition to the built-in HTML tags, custom components often need to be controlled too.
+This pattern called **lifting state up**.
+
+Consider that we have a temperature input component.
+We can choose the unit to be Celsius or Fahrenheit.
+
+<SrcReactEditor js={'/react/code/controlled2.jsx'}/>
+
+Now our requirement is an automatic temperature converter,
+
+We add two inputs to `App` component.
+
+<SrcReactEditor js={'/react/code/controlled2-2.jsx'}/>
+
+Unfortunately, the two text boxes not automatically converted.
+Because their state managed by themselves and not controlled by outsiders.
+
+At this time, we need to turn the component into a **controlled component**.
+In other words, we **lift the state up** to the parent component.
+
+<SrcReactEditor js={'/react/code/controlled2-3.jsx'}/>
+
+## Summary
+
+**Controlled Component** refers to a component whose state controlled by a parent component.
+With controlled components, business logic can focus on the state instead of UI elements.
+
+For custom components, we can actively transform them into controlled components.
+So that the parent component can associate the state of the child component.
+This mode called **Lifting State Up**
+
+## Thinking
+
+However, controlled component is not a silver bullet.
+
+Imagine that our UI components are gradually becoming more complex.
+From the top-level components to the bottom-level components,
+we have experienced many layers of nesting of custom components.
+
+So we use controlled component to converge the state to the top-level components.
+But things are not going in a good direction, we need pass data in each level.
+
+```jsx
+const Avatar = () => (
+  <img src={user.avatar}/>
+)
+
+const UserInfo = () => (
+  <div>
+    <Avatar user={user}/>
+    ...
+  </div>
+)
+
+const AppBar = () => (
+  <div>
+    <UserInfo user={user}/>
+    ...
+  </div>
+)
+
+const App = () => (
+  <div>
+    <AppBar user={user}/>
+    ...
+  </div>
+)
+```
+
+We will learn how to deal with this situation in later chapters.

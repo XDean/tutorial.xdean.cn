@@ -1,0 +1,28 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'list',
+  name: 'List Render'
+}
+
+We have learned conditional render in last chapter.
+Another normal condition is to render a series component.
+
+Let's look at the example we used in the component chapter:
+
+<SrcReactEditor js={'/react/code/component3.jsx'}/>
+
+Obviously, we can't write `<Welcome/>` for every person.
+
+So we can use list render here.
+
+Suppose we have an array object with all people's info.
+We can perform `map` on this array to calculate all JSX elements.
+
+<SrcReactEditor js={'/react/code/list.jsx'}/>
+
+It is worth noting that we specified the attribute `key` on `Welcome`.
+If you do not specify `key`, you will receive a warning `a key should be provided for list items` in development mode.
+
+The function of `key` is to allow React to more accurately identify which elements have changed during rendering, thereby reducing the load.
+When using list render, you must specify the `key`, and the `key` between sibling nodes is unique.

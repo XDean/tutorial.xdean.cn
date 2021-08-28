@@ -2,21 +2,16 @@ import {DefaultLayout} from "../components/layout/DefaultLayout";
 import {AllTopics} from "../components/topics/topics";
 import Head from "next/head";
 import Link from 'next/link'
-import {faBook} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useLocaleString} from "../components/util/locale";
 
 export default function Index() {
+  const localString = useLocaleString()
   return (
     <DefaultLayout topbar={{
-      title: 'XDean的教程',
-      left:
-        <FontAwesomeIcon
-          title={'回到主页'}
-          icon={faBook}
-          className={'!w-[36px] !h-[36px] mr-2'}/>
+      title: localString.get('title'),
     }}>
       <Head>
-        <title>XDean的教程</title>
+        <title>{localString.get('title')}</title>
       </Head>
       <div className={'m-8'}>
         {AllTopics.map(t => (

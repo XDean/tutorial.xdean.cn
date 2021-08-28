@@ -1,0 +1,125 @@
+export const meta = {
+  id: 'df-basic',
+  name: 'DataFrame基础',
+}
+
+## SparkSession
+
+与SparkContext之于rdd类似，dataframe也需要一个入口，即SparkSeession。
+
+典型的创建过程如下：
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+    .builder \
+    .master('local') \
+    .config("spark.some.config.option", "some-value") \
+    .getOrCreate()
+```
+
+其中master的配置可以参阅<Link href={'/article/spark/basic/rdd-basic'}>RDD基础</Link>一节
+
+同样的，如果你使用的是交互式命令行，则`spark`对象已经为你创建好，不需要手动创建。
+如果需要修改master或者配置，应当在调用`pyspark`命令时指定。
+
+## 创建DataFrame
+
+### 从文件读取
+
+DataFrame读取文件只需要使用`spark.read`对象，其预设了多种数据格式。
+
+例如，读取JSON文件：
+
+```python
+df = spark.read.json('/path/to/some.json')
+```
+
+读取时还可以指定参数。例如读取csv格式文件，指定分隔符为`\t`，并自动推导数据类型：
+
+```python
+df = spark.read.csv('/path/to/some.csv', sep='\t', inferSchema=True)
+```
+
+Spark默认支持的格式包括
+
+- Text
+- JSON
+- CSV
+- **Parquet**
+- ORC
+- AVRO
+- Binary
+
+其中需要注意的是Parquet格式，它是专为大数据设计的数据格式，未来你应该把它作为数据存储格式的优先选择。
+详情参见[Parquet官网][parquet]。
+
+### 从对象创建
+
+Spark可以把元组数组创建为DataFrame：
+
+```python
+data = [
+    ("foo", 5),
+    ("bar", 100),
+    ("faz", 20)
+]
+df = spark.createDataFrame(data)
+```
+
+但是，这样创建的DataFrame的列名为`_1, _2`。为了可读易用，我们应当在创建时指定列名：
+
+```python
+columns = ["name", "value"]
+df = spark.createDataFrame(data, columns)
+```
+
+当只提供列名时，Spark会推导列的类型，如果你还想指定列的详细信息，或者需要指定复杂的类型，你可以使用`StructType`：
+
+```python
+from pyspark.sql.types import *
+schema = StructType([
+    StructField('name', dataType=StringType(), nullable=False),
+    StructField('value', dataType=IntegerType(), nullable=True)
+])
+df = spark.createDataFrame(data, schema)
+```
+
+创建后，你可以使用`df.printSchema()`来看一看得到的数据帧结构。
+
+### 和RDD转换
+
+RDD转DataFrame的方式和上面从列表创建的方式很相似：
+
+```python
+rdd = sc.parallelize(data)
+df = spark.createDataFrame(rdd)
+df = spark.createDataFrame(rdd, columns)
+df = spark.createDataFrame(rdd, schema)
+
+# rdd.toDF 是一个快捷方式
+df = rdd.toDF()
+df = rdd.toDF(columns)
+df = rdd.toDF(schema)
+```
+
+注意，如果没有指定schema，则RDD的元素类型必须是(数组/列表/Row)之一，否则Spark会因无法正确推导类型而报错。
+
+DataFrame转RDD就更简单了：
+
+```python
+rdd = df.rdd # rdd 元素类型为 pyspark.sql.types.Row
+```
+
+## 保存DataFrame
+
+保存DataFrame的方式和读取类似：只需要调用`rdd.write`对象上的方法
+
+```python
+df.write.csv('/path/to/some.csv', header=True)
+df.write.parquet('/path/to/some.parquet')
+```
+
+
+[parquet]: https://parquet.apache.org/

@@ -1,0 +1,76 @@
+import rdd from '../../../../../public/spark/resources/rdd.png'
+import rddDf from '../../../../../public/spark/resources/rdd-df-structure.png'
+import Image from 'next/image'
+export const meta = {
+  id: 'rdd-dataframe',
+  name: 'RDD & DataFrame',
+}
+
+在上一节我们演示了两个版本的Hello World，分别使用的是Spark的RDD和DataFrame API。
+
+这一节我们就聊聊它们分别是什么，为什么会有两套API。在了解了原因之后再来分别学习如何使用它们。
+
+## RDD
+
+- RDD全称**R**esilient **D**istributed **D**ataset，即弹性分布式数据集。
+- RDD从Spark 1.0版本就存在。
+- RDD是数据元素的集合，集合被分为分区(partition)，分布在集群的各个节点上。
+- RDD的元素很多时候以`(key,value)`键值对的形式组织，键是分区混洗的依据。
+- RDD是不可变的，它可以通过操作符生成新的RDD。(这类操作符被称为转换Transformation)
+- RDD是惰性的，只有当操作符结果不为RDD时才会提交任务进行计算。(这类操作符被称为动作Action)
+- RDD是容错的，它维护了所有的依赖RDD，当错误发生时可以通过依赖重建分区(依赖关系又被称为血统Lineage)
+
+<div className={'max-w-[700px]'}>
+  <Image src={rdd} />
+</div>
+
+## DataFrame
+
+- DataFrame，即数据帧。它在Spark 1.3版本引入。
+- DataFrame以列的方式维护了数据的结构(schema)，形式上可以理解为关系数据库中的表。
+- DataFrame可以注册为SQL表，通过SQL语句查询。
+- DataFrame计算使用相同的执行引擎，与语言/API无关。
+- DataFrame的执行会被Catalyst优化器优化，包括但不限于常量折叠，谓词下推，投影修剪。
+
+## 联系
+
+- DataFrame在底层依然会转换成RDD操作，这由执行引擎来完成。
+- DataFrame可以和RDD相互转换
+  - `DataFrame.rdd`方法可以获取到对应的底层RDD对象
+  - `RDD.toDF`方法可以把RDD转换成DataFrame对象
+
+## 区别
+
+在形式上，两者最主要的区别是数据的组织
+
+- 在RDD中，元素是非结构化的，每一行是一个对象或者是一个键值对
+- 在DataFrame中，元素是结构化的，Schema中维护了元素的列信息，包括名称和类型
+
+<div className={'max-w-[700px]'}>
+  <Image src={rddDf} />
+</div>
+
+在使用上，两者有着不同的API(这里可以回过头去参考两个HelloWorld示例)
+
+- RDD的操作符需要使用自定义函数
+- DataFrame的操作符更多地使用内置函数，只需要给定参数
+
+在性能上，DataFrame要优于RDD。
+
+- DataFrame有专用的执行引擎，其中包含了优化器，对执行进行优化。
+- 而RDD即不知道数据的结构，也不知道计算的细节，故无法提供任何优化。
+
+- DataFrame的执行通过执行引擎生成scala代码执行，与应用的语言无关(UDF是一个例外，会在后文学习)
+- RDD的计算需要唤起对应语言的进程来执行，例如使用Python时，Executor会频繁唤起Python进程来执行用户函数
+
+## 我该用什么
+
+既然Spark有两种API，那么我们到底应该学习哪些又该使用哪些呢？
+
+**答案是DataFrame优先，尤其是当你使用Python时**
+
+- DataFrame有着更好的性能和更加易用的API，我们应该总是首先使用DataFrame
+- 事实上，Spark的很多内置API都已经转移到了DataFrame,例如MLlib
+- 只有在必要时使用RDD，在编写RDD同时你必须要知道你需要自己去优化它们
+
+后文我们将同时学习RDD和DataFrame两种API的使用，重点放在DataFrame。

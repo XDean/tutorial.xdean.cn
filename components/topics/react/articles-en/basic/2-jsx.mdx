@@ -1,0 +1,44 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'jsx',
+  name: 'JSX',
+}
+
+Let's take a look into `Hello World` again.
+
+<SrcReactEditor js={'/react/code/hello-world.jsx'}/>
+
+It seems we write "HTML" directly in Javascript, but in fact it is not HTML, neither string literal.
+
+It is JSX, a syntax extension to JavaScript.
+It allows us to write HTML-like code in JavaScript.
+Then it will transfer them as React element when compiled.
+Such as:
+
+```jsx
+const App = () => (
+  <h1 className="greeting">
+    Hello, world!
+  </h1>
+);
+
+// will transfered to
+
+const App = () => React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+```
+
+With JSX, it is very convenient to write UI code in JavaScript.
+Because all the things is in JavaScript, we can insert JavaScript in JSX tag.
+We need use `{}` to wrap JavaScript content, it can be inserted into attribute/content.
+
+
+<SrcReactEditor js={'/react/code/jsx.jsx'}/>
+
+In another side, JSX tag itself is JavaScript value. It can be used as parameter or return value.
+
+<SrcReactEditor js={'/react/code/jsx2.jsx'}/>

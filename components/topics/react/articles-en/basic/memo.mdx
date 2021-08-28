@@ -1,0 +1,84 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'memo',
+  name: 'useMemo & memo'
+}
+
+## useMemo
+
+`useMemo`is used to create a [memorized](https://en.wikipedia.org/wiki/Memoization) value.
+
+It accepts a calculating function and a dependency list. When dependencies changed, it will re-calculate.
+
+```jsx
+const Comp = ({a, b, c, d}) => {
+
+  const value = computeExpensiveValue(a,b)
+  // 上下两种方式会有性能差异
+  const value = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+
+  return (
+    <div>
+      ...
+      {value}
+    </div>
+  )
+}
+```
+
+`useMemo` can help you improve performance by reducing expensive calculating.
+
+You may find `useMemo` is similar with `useEffect`, but you should not mix them.
+`useMemo` only cares about data about rendering.
+Any operation not related to rendering should be placed in `useEffect`.
+
+## React.memo
+
+Another usage of `React.useMemo` is to use with `React.memo`.
+
+`React.memo` is to wrap a component as memorized component.
+If props not change, it will return the last result instead of render it again.
+
+```jsx
+const Label = React.memo(({text}) => (
+  <p>
+    {text}
+  </p>
+))
+```
+
+But in many cases, `React.memo` cannot work as expected. See the example below:
+
+<SrcReactEditor js={'/react/code/memo.jsx'}/>
+
+We use `React.memo` to wrap `Label` component。
+Open the console, you will find `<Label data={titlt}/>` still be called when clicked.
+
+The reason is, when `App` re-rendered, `title` object created as a new object.
+While `React.memo` only do shallow diff, the memorized policy failed for `title`, so it re-render the `Label` component.
+
+In order to create a real memorized components and improve performance, we need to wrap `title` in `React.useMemo`.
+Try to modify the above code as:
+
+```javascript
+const title = React.useMemo(() => ({msg: 'React Counter', size: 20}), [])
+```
+
+## useCallback
+
+Usually we need pass callback function to component, like `onClick`.
+They will also affect the rendering, so we wrap them as memorized value.
+
+```javascript
+const handleClick = React.useMemo(() => () => ..., [])
+```
+
+But it seems not very clear with nest arrow function.
+So that React provide `React.useCallback` as shortcut.
+
+The following code is equivalent to code above.
+
+```javascript
+const handleClick = React.useCallback(() => ..., [])
+```

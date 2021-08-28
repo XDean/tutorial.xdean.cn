@@ -1,0 +1,28 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'ref',
+  name: 'useRef'
+}
+
+Do you remember, in the Controlled Components chapter, I said React can also operate on DOM elements?
+
+The way is to use `useRef` hook.
+
+```javascript
+// create ref
+const ref = useRef(initialValue)
+// change ref value
+ref.current = ...
+```
+
+`useRef` accept an optional default value, return a ref object.
+It only has one attribute `current`.
+
+<SrcReactEditor js={'/react/code/ref.jsx'}/>
+
+1. Create a ref object by `useRef`
+2. Pass the ref object to the `input` element, and the corresponding DOM element will be set to ref when render
+3. Read `ref.current` to get DOM elements
+
+Note that, ref is not state, it will not cause re-render when change.

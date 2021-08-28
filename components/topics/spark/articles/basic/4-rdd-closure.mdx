@@ -1,0 +1,90 @@
+export const meta = {
+  id: 'rdd-closure',
+  name: 'RDD闭包',
+}
+
+编写分布式的难点在于协调节点之间的工作，而Spark为我们封装了这些实现。
+这在提供便利的同时，也为刚刚上手的新同学带来了一些误解，写着写着就忘记了自己在写分布式应用。
+
+一种常见的错误如下：
+
+```python
+counter = 0
+rdd = sc.parallelize(range(0, 10))
+
+# 这是错误的代码，不要使用
+def increment(x):
+    global counter
+    counter += x
+
+rdd.foreach(increment)
+
+print("Counter value: ", counter)
+```
+
+乍一看似乎没有什么问题，但是运行代码后你会发现，结果居然是0。
+
+原因很简单，因为你在写的是Spark分布式应用！`increment`的调用是由每个Worker在单独的Python进程中执行的。
+
+Spark为了分发任务，会首先计算任务的闭包(closures)，即任务和它所有的依赖，包括变量和方法。
+这样任务才能在其他节点重建执行。此时闭包捕获的`couter`为0。
+当任务发送到Worker节点后，反序列化得到的`couter`已经不再是Driver上定义的`counter`了，而是当前进程的本地变量。
+对`couter`的修改不会影响到Driver上的`couter`变量，故而结果为0。
+
+要解决这个问题，应当采用聚合的方式，而非变量。
+
+```python
+rdd.reduce(lambda a,b: a+b)
+```
+
+然而，如果你一定需要一个共享变量，Spark也提供了相关支持，即Accumulators(累加器)。
+
+## Accumulators
+
+**请注意，累加器总是应该作为最后的选择，尝试使用聚合操作来代替它**
+
+累加器维护了一个只可以进行`add`操作的值，默认执行的就是整型的加法。
+
+使用累加器完成上面求和操作的代码如下：
+
+```python
+accum = sc.accumulator(0)
+
+rdd = sc.parallelize(range(0, 10))
+rdd.foreach(lambda e: accum.add(e))
+
+print(accum.value)
+```
+
+对于其他类型的值，可以自定义累加器进行`add`操作：
+
+```python
+class VectorAccumulatorParam(AccumulatorParam):
+    def zero(self, initialValue):
+        return Vector.zeros(initialValue.size)
+
+    def addInPlace(self, v1, v2):
+        v1 += v2
+        return v1
+vecAccum = sc.accumulator(Vector(...), VectorAccumulatorParam())
+```
+
+## Broadcast
+
+前面讲到Spark会序列化任务闭包来传递任务，闭包捕获了所有必须的变量和方法。
+然而，这些变量应当总是只读的，否则就会引发上面的问题。
+
+对于只读变量，每个任务都会捕获它并进行序列化/反序列化，这增加了不必要的IO/CPU负载，当变量体积很大时尤为明显。
+
+为了在任务中使用共享的只读变量，Spark提供了广播变量(Broadcast)。
+
+广播会把变量发送给每一个节点并进行缓存。这使得后续任务不再需要传递该变量。
+
+```python
+data = [1, 2, 3]
+broadcastVar = sc.broadcast(data)
+rdd.map(lambda e: broadcastData.value.index(e))
+```
+
+- 你可以调用`.unpersist`方法来清空广播缓存，再次使用时会被重新广播
+- 你可以调用`.destroy`方法来销毁缓存

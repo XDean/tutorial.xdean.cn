@@ -1,0 +1,22 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'hello-world',
+  name: 'Hello World'
+}
+
+We have seen the  `Hello World` example in last chapter.
+It only has few lines, but in fact, it has shown the core function about React.
+
+<SrcReactEditor js={'/react/code/hello-world.jsx'} css={'/react/code/hello-world.css'}/>
+
+React only do one thing: RENDER.
+
+We call `ReactDOM.render` to render React component onto target DOM element.
+The `App` variable in example above is the simplest React component.
+
+You may find the JS code is not normal.
+We write `<h1/>` directly in Javascript code.
+It looks like HTML, but it's not.
+
+It is JSX, which is our next chapter's topic.

@@ -1,0 +1,45 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor"; import {Button} from "@blueprintjs/core"; import {useState} from "react";
+
+export const meta = {
+  id: 'tic-tac-toe',
+  name: 'Practice - Tic Tac Toe'
+}
+
+In this section, we will use knowledge we have learned to make a simple tic-tac-toe game.
+The final game is as following
+
+<SrcReactEditor js={'/react/code/tic-tac-toe.jsx'} css={'/react/code/tic-tac-toe.css'} hideCode className={'w-6/12'}/>
+
+Here gives you initial code ((css style has provided).
+
+Start your first React project now!
+
+<SrcReactEditor js={'/react/code/tic-tac-toe-1.jsx'} css={'/react/code/tic-tac-toe.css'}/>
+
+
+
+Rule: ([Wiki][wiki])
+
+Other features:
+
+1. Display current game status
+2. Can go back to the history of the game
+
+export const Answer = () => {
+  const [show, setShow] = useState(false)
+  return (
+    <>
+      <Button onClick={() => setShow(e => !e)} text={show ? 'Show Code' : 'Hide Code'}/>
+      <SrcReactEditor
+        className={show ? '' : 'hidden'}
+        js={'/react/code/tic-tac-toe.jsx'}
+        css={'/react/code/tic-tac-toe.css'}/>
+    </>
+  )
+}
+
+After you done, you can click button below to see the reference code.
+
+<Answer/>
+
+[wiki]: https://en.wikipedia.org/wiki/Tic-tac-toe

@@ -9,8 +9,10 @@ export const SparkTopic: Topic = {
   name: 'Spark',
   draft: true,
   Icon: () => <Image src={sparkLogo} alt={'Spark Logo'} height={40} width={100}/>,
-  articles: [
-    OverviewArticleSet,
-    BasicArticleSet,
-  ]
+  articles: [{
+    sets: [
+      OverviewArticleSet,
+      BasicArticleSet,
+    ]
+  }]
 }

@@ -1,0 +1,25 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+
+export const meta = {
+  id: 'condition',
+  name: 'Conditional Render'
+}
+
+As we mentioned in the JSX section, JSX is actually JS code.
+So of course we can use JS to control the rendering of JSX.
+
+Let's see a simple example:
+
+<SrcReactEditor js={'/react/code/condition.jsx'}/>
+
+Try to modify `login`. You will see different message shown.
+
+Well, we can't control the login state manually.
+We should define a `login` state in our component.
+The knowledge about state will in State chapter.
+
+Now we add a state to control and add two button to login/logout
+
+<SrcReactEditor js={'/react/code/condition2.jsx'}/>
+
+At the same time, the example shows how to use JS ternary operators and logical operators.
