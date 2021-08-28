@@ -81,7 +81,7 @@ export default function Index() {
         )}>
           <TOC topic={topic} articleSet={articleSet} article={article} articleLocale={localArticleSets}/>
         </div>
-        <div className={'md:hidden absolute right-2 top-2 z-40 bg-white rounded-full p-1 ring-1 flex'}
+        <div className={'md:hidden absolute right-2 top-2 z-30 bg-white rounded-full p-1 ring-1 flex'}
              onClick={() => setOpenToc(o => !o)}
         >
           <FontAwesomeIcon icon={faBars}
