@@ -32,13 +32,13 @@ export const ReactEditor = (props: ReactEditorProps) => {
       <div className={clsx('w-0 flex-grow border-r flex-col flex', props.hideCode && 'hidden')}>
         <div className={'bg-black text-white text-lg flex flex-row items-center'}>
           <div
-            className={clsx('mx-1 w-8 cursor-pointer hover:underline hover:text-gray-300', type === 'js' && 'underline')}
+            className={clsx('mx-1 cursor-pointer hover:underline hover:text-gray-300', type === 'js' && 'underline')}
             onClick={useCallback(() => setType('js'), [])}
           >
             JSX
           </div>
           <div
-            className={clsx('mx-1 w-8 cursor-pointer hover:underline hover:text-gray-300', type === 'css' && 'underline')}
+            className={clsx('mx-1 cursor-pointer hover:underline hover:text-gray-300', type === 'css' && 'underline')}
             onClick={useCallback(() => setType('css'), [])}>
             CSS
           </div>
