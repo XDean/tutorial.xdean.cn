@@ -1,0 +1,129 @@
+import NodeJS from './resources/nodejs.png'
+import babel from './resources/babel.svg'
+import npm from './resources/npm.svg'
+import webpack from './resources/webpack.png'
+import typescript from './resources/typescript.png'
+import ts1 from './resources/ts1.png'
+import ts2 from './resources/ts2.png'
+import Image from 'common/components/Image'
+import packageJson from 'package.json'
+
+export const meta = {
+  id: 'basic',
+  name: '基础知识',
+}
+
+在开始学习React框架之前，我们要了解相关的技术和构建工具。
+
+这里不会展开详细阐述每一个技术，而是为了让你对它们的功能有一定的了解。
+
+## [Node.JS][node]
+
+<Image src={NodeJS} width={300}/>
+
+Javascript作为浏览器的脚本语言，原本只能运行在浏览器环境中。
+而Node是一个跨平台的JS环境，使得JS可以在本地环境中运行。
+
+接下来将要学习的很多构建工具都是用JS编写的，而他们都运行在Node环境下，所以Node是必不可少的。([点击下载][node])
+
+需要注意的是，因为Node的存在，JS运行环境被分为Browser和Node，在编写环境特定的JS代码时需要注意。
+
+- 在Browser环境不能访问本地文件或者打开本地端口
+- 在Node环境没有全局变量`document`, `window` 以及各种Web API对象
+
+## [NPM][npm]
+
+<Image src={npm} width={300}/>
+
+NPM全称Node Package Manager，顾名思义，它是Node的包管理工具。
+NPM不需要额外下载，它已经集成在Node发行版中。
+
+NPM的入口是`package.json`文件，其中
+
+- `scripts`定义了项目的构建/运行/测试脚本
+- `dependencies`定义了项目的依赖项
+- `devDependencies`定义了项目的开发时依赖
+
+有了`package.json`文件后
+
+- 通过`npm install`命令就可以一键安装所有依赖项
+- 通过`npm run <script>`命令就可以运行对应的脚本
+
+下面展示了这个教学网站的`package.json`文件
+
+<pre className={'language-json h-[400px]'}>
+<code className={'language-json'}>
+  {JSON.stringify(packageJson, null, '    ')}
+</code>
+</pre>
+
+## ECMAScript
+
+ECMAScript是Javascript的标准。
+自2015年ECMAScript 6开始，有大量的新的语法和功能被添加。包括但不限于
+
+- Promise
+- Arrow Function
+- Class
+- Destructing
+- Generator
+- Modules
+
+现代JS工程一般会使用最新的ES版本，以获得最佳的表现力和生产力。
+如果你还没有学习了解过这些JS新特性，你可以先学习它们。
+
+[ES6相关教程][es6-doc]
+
+## [Babel][babel]
+
+<Image src={babel} width={300}/>
+
+现代浏览器一般至少支持ES5，一些已经支持ES6或者更高版本。
+但是我们的网页不能指定用户只在最新版本的浏览器中打开，所以需要兼容各种浏览器。
+
+Babel就是一个用来向后兼容的Javascript编译器，它可以将较新版本的JS编译转换为较低版本的JS代码，一般目标版本是ES5。
+
+除了语法上的转换，Babel还会通过[polyfill][polyfill]来兼容低版本不存在的API。
+
+## [Webpack][webpack]
+
+<Image src={webpack} width={300}/>
+
+在引入模块化概念之后，JS代码终于可以按照功能划分为多个文件，相互组织成更大的功能。
+但是最终应用到浏览器上时，我们不可能依赖数十上百个JS文件，我们需要把这些JS文件汇总成一个(或几个)文件。
+
+这个过程被称为打包(Bundle)，就是Webpack的主要职责。
+
+除了打包JS文件，webpack还可以自定义加载器来加载任何格式的文件，例如`css`,`json`,`image`等等
+
+```javascript
+import classes from './styles.js'
+import data from './data.json'
+import logo from '../../favicon.ico'
+```
+
+## [Typescript][typescript]
+
+<Image src={typescript} width={48}/>
+
+Typescript是构建在Javascript之上的强类型编程语言。
+
+它不是一种全新的编程语言，而是在Javascript之上添加了额外的强类型支持。
+通过类型定义，可以更早地发现代码中的错误，也可以得到更丰富的代码提示。
+
+<div className={'space-x-4'}>
+  <Image src={ts1} width={500} className={'inline-block'}/>
+  <Image src={ts2} width={500} className={'inline-block'}/>
+</div>
+
+TS代码可以被转换为Javascript代码从而运行在任何JS可以运行的地方，即TS是JS的超集。
+
+TS是现代化JS网页应用的**必选项**，很多时候TS和JS可以作为同义词理解。
+
+[node]: https://nodejs.org/en/
+[npm]: https://www.npmjs.com/
+[es6-doc]: https://github.com/lukehoban/es6features
+[babel]: https://babeljs.io/docs/en/
+[polyfill]: https://developer.mozilla.org/en-US/docs/Glossary/Polyfill
+[webpack]: https://webpack.js.org/
+[typescript]: https://www.typescriptlang.org/

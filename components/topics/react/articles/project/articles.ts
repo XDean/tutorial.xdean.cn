@@ -1,10 +1,11 @@
 import A0, {meta as m0} from './0-introduce.mdx'
+import A1, {meta as m1} from './1-basic.mdx'
 import {ArticleData, ArticleSet} from "../../../topic";
 
-const Introduce = {Component: A0, meta: m0}
 
 export const ProjectArticles: ArticleData[] = [
-  Introduce,
+  {Component: A0, meta: m0},
+  {Component: A1, meta: m1},
 ]
 
 export const ProjectArticleSet: ArticleSet = {
