@@ -83,8 +83,73 @@ my-app
   - `index.html`是单页应用模板，最终我们的JS脚本会在这个html中进行加载，一般不会对它进行修改
   - 除了图片文件还有两个文件：`manifest.json`和`robots.txt`，它们存放了网站的元信息，详情可以参考[manifest文档][manifest]和[robots文档][robots]
 - `src`文件夹包含了项目所有的源代码
-  - `index.tsx`是项目的主入口，其渲染了React组件到`root`节点
+  - `index.tsx`是**项目的主入口**，其渲染了React组件到`root`节点
   - `App.tsx`是React根组件
+
+## 功能特性
+
+除了快速搭建项目，Create React App还通过配置webpack内置了很多实用功能。这里介绍其中几项。
+
+### CSS导入
+
+```jsx
+import './styles.css'
+import classes from './button.module.css'
+
+const Button = ()=>(
+  <div className={classes.info}>
+    <span className={'link'}>button</span>
+  </div>
+)
+```
+
+Webpack默认配置了CSS加载器，可以直接在JS中导入CSS文件。
+
+如果CSS文件以`.module.css`结尾，则可以从默认导入中得到类型安全的类名。
+而且这些类名会在编译时生成，保证全局唯一。
+例如上面例子中的`info`类，最终名称将会类似于`button_info_ax7yz`。
+
+### 图片导入
+
+```jsx
+import React from 'react';
+import logo from './logo.png'; // Tell webpack this JS file uses this image
+
+console.log(logo); // /logo.84287d09.png
+
+function Header() {
+  // Import result is the URL of your image
+  return <img src={logo} alt="Logo" />;
+}
+
+export default Header;
+```
+
+图片也可以直接作为模块导入，并用作`img.src`属性。
+其支持所有主流格式，BMP,GIF,JPG,PNG,SVG。
+
+### 后台代理
+
+通常，前端应用会搭配后端程序使用。
+生产中一般前后端会通过诸如nginx的工具整合到同一个端口使用。
+
+为了在开发中可以一致地处理端口，Create React App提供了Proxy Server功能。
+
+只需要在`package.json`中一行配置
+
+```text
+"proxy" : "http://localhost:4000"
+```
+
+运行应用时就会同时启动代理功能，将后端请求转发给后端服务器。
+
+## 部署
+
+如前所述，运行`npm run build`就可以构建出一个生产版本的React应用程序。
+生成的文件在`build`文件夹内，它们是完全静态的文件。
+你可以使用任何你喜欢的HTTP服务器来提供网页内容。
+
+
 
 [doc]: https://create-react-app.dev/
 [github]: https://www.github.com/facebook/create-react-app
