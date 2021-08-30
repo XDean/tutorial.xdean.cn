@@ -1,6 +1,3 @@
-@import "~normalize.css";
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-
 @import "./md.css";
 @import "./ace.css";
 
@@ -11,3 +8,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    button {
+        @apply border shadow rounded hover:bg-gray-100 hover:border-blue-300 p-1;
+    }
+}

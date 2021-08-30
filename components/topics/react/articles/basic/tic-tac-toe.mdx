@@ -1,4 +1,5 @@
-import {SrcReactEditor} from "../../editor/SrcReactEditor"; import {Button} from "@blueprintjs/core"; import {useState} from "react";
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+import {useState} from "react";
 
 export const meta = {
   id: 'tic-tac-toe',
@@ -30,7 +31,9 @@ export const Answer = () => {
   const [show, setShow] = useState(false)
   return (
     <>
-      <Button onClick={() => setShow(e => !e)} text={show ? '隐藏参考示例' : '显示参考示例'}/>
+      <button onClick={() => setShow(e => !e)}>
+        {show ? '隐藏参考示例' : '显示参考示例'}
+      </button>
       <SrcReactEditor
         className={show ? '' : 'hidden'}
         js={'/react/code/tic-tac-toe.jsx'}

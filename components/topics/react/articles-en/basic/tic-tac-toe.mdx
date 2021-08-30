@@ -1,4 +1,5 @@
-import {SrcReactEditor} from "../../editor/SrcReactEditor"; import {Button} from "@blueprintjs/core"; import {useState} from "react";
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+import {useState} from "react";
 
 export const meta = {
   id: 'tic-tac-toe',
@@ -16,8 +17,6 @@ Start your first React project now!
 
 <SrcReactEditor js={'/react/code/tic-tac-toe-1.jsx'} css={'/react/code/tic-tac-toe.css'}/>
 
-
-
 Rule: ([Wiki][wiki])
 
 Other features:
@@ -29,7 +28,9 @@ export const Answer = () => {
   const [show, setShow] = useState(false)
   return (
     <>
-      <Button onClick={() => setShow(e => !e)} text={show ? 'Show Code' : 'Hide Code'}/>
+      <button onClick={() => setShow(e => !e)}>
+        {show ? 'Show Code' : 'Hide Code'}
+      </button>
       <SrcReactEditor
         className={show ? '' : 'hidden'}
         js={'/react/code/tic-tac-toe.jsx'}
