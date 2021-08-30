@@ -1,10 +1,6 @@
 @import "./md.css";
 @import "./ace.css";
 
-@import "~prismjs/themes/prism-okaidia.css";
-
-@import "~katex/dist/katex.min.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -1,17 +1,22 @@
 const withMDX = require('@next/mdx');
-const rehypePrism = require('@mapbox/rehype-prism');
+const remarkPrism = require('remark-prism');
 const remarkMath = require('remark-math')
 const rehypeKatex = require('rehype-katex')
 
 module.exports = withMDX({
   extension: /\.(md|mdx)$/,
   options: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [
+      remarkMath,
+      [remarkPrism, {
+        plugins: [
+          'line-numbers',
+          'treeview',
+        ]
+      }]
+    ],
     rehypePlugins: [
       rehypeKatex,
-      [rehypePrism, {
-        ignoreMissing: true
-      }]
     ],
   },
 })({
