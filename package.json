@@ -15,11 +15,13 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@mapbox/rehype-prism": "^0.6.0",
+    "@types/cookie": "^0.4.1",
     "@types/react-splitter-layout": "^3.0.1",
     "ace-builds": "^1.4.12",
     "clsx": "^1.1.1",
+    "cookie": "^0.4.1",
     "github-markdown-css": "^4.0.0",
-    "next": "^11.0.0",
+    "next": "^11.1.0",
     "react": "^17.0.2",
     "react-ace": "^9.4.0",
     "react-dom": "^17.0.2",
@@ -27,6 +29,7 @@
     "react-utterances": "^0.6.4",
     "rehype-katex": "^5.0.0",
     "remark-math": "^3.0.1",
+    "serverless-mysql": "^1.5.4",
     "swr": "^0.5.6"
   },
   "devDependencies": {
