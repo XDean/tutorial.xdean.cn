@@ -1,10 +1,10 @@
 import {useMemo} from "react";
 import {GithubComment} from "./util/GithubComment";
 import Link from 'next/link'
-import {VisitorTag} from "./util/VisitorTag";
 import css from './Article.module.css'
 import {ArticleData, ArticleSet, Topic} from "./topics/topic";
 import {useLocaleString} from "./util/locale";
+import {ArticleHead} from "./article/ArticleHead";
 
 type Props = {
   topic: Topic
@@ -23,13 +23,8 @@ export const Article = (props: Props) => {
   }, [props.article])
   return (
     <div className={'w-full h-full relative p-2'}>
+      <ArticleHead article={props.article}/>
       <article className="markdown-body">
-        <h1 className={'flex flex-row items-end'}>
-          <div className={'mr-2'}>
-            {props.article.meta.title || props.article.meta.name}
-          </div>
-          <VisitorTag id={`${props.articleSet.id}.${props.article.meta.id}`}/>
-        </h1>
         <props.article.Component/>
       </article>
       <div className={'flex flex-col md:flex-row justify-center pb-4 pt-8'}>
