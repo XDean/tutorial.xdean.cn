@@ -1,0 +1,92 @@
+import Image from 'common/components/Image'
+import create from './resources/create-react-app.svg'
+
+export const meta = {
+  id: 'create-react-app',
+  name: 'Create React App',
+}
+
+上一节我们学习了各种构建工具，错综复杂。
+在实际项目中如果总是要自己去配置Babel，Webpack等各种工具，实在是非常繁复无趣且重复。
+所以我们需要一些工具来帮助我们快速创建一个标准React应用。
+
+最流行的便是Create React App。([官方文档][doc], [Github][github])
+
+Create React App是Facebook官方提供的用于创建React单页应用程序的工具。
+它的优点是简单易用，无需配置，集成了各种现代化设施。
+
+## 创建项目
+
+在确认安装Node(其自带了npm)后，只需要几行命令就可以创建并启动React应用：
+
+```bash
+npx create-react-app my-app
+cd my-app
+npm start
+```
+
+<Image src={create}/>
+
+可以看到，我们没有进行任何配置，就创建了一个React应用。
+事实上，Create React App为我们封装了Babel和Webpack的细节，使我们可以不用关心它们的配置。
+
+创建时可以通过`--template <name>`来指定模板，从而初始化额外的功能，常用的有`--template typescript`以创建TS项目。
+
+## 项目结构
+
+```text
+$ npx create-react-app app --template typescript --use-npm
+```
+
+通过上面这条命令，生成了`my-app`文件夹，其中文件结构如下：
+
+```treeview
+my-app
+|-- .git/
+|-- node_modules/
+|-- public/
+|   |-- favicon.ico
+|   |-- index.html
+|   |-- logo192.png
+|   |-- logo512.png
+|   |-- manifest.json
+|   `-- robots.txt
+|-- src/
+|   |-- App.css
+|   |-- App.test.tsx
+|   |-- App.tsx
+|   |-- index.css
+|   |-- index.tsx
+|   |-- logo.svg
+|   |-- react-app-env.d.ts
+|   |-- reportWebVital.ts
+|   `-- setupTests.ts
+|-- .gitignore
+|-- package.json
+|-- package-lock.json
+|-- README.md
+`-- tsconfig.json
+```
+
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+- git仓库已经被初始化好，并提供了默认的`.gitignore`
+- npm的`package.json`已经配置好，其中包含了4个脚本
+  - start，本地启动React应用
+  - build，构建React应用，最终会得到一个JS文件和所有静态文件
+  - test，运行所有测试用例
+  - eject，展开CreatReactApp隐藏的所有配置，该脚本一般不会用到，可以直接删除
+- typescript的配置文件`tsconfig.json`已经默认配置好
+- `public`文件夹存放了所有静态文件
+  - `index.html`是单页应用模板，最终我们的JS脚本会在这个html中进行加载，一般不会对它进行修改
+  - 除了图片文件还有两个文件：`manifest.json`和`robots.txt`，它们存放了网站的元信息，详情可以参考[manifest文档][manifest]和[robots文档][robots]
+- `src`文件夹包含了项目所有的源代码
+  - `index.tsx`是项目的主入口，其渲染了React组件到`root`节点
+  - `App.tsx`是React根组件
+
+[doc]: https://create-react-app.dev/
+[github]: https://www.github.com/facebook/create-react-app
+[robots]: https://developer.mozilla.org/en-US/docs/Glossary/Robots.txt
+[manifset]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json
