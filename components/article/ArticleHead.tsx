@@ -1,6 +1,7 @@
 import {ArticleData} from "../topics/topic";
 import {Read} from "../../common/components/badge/Read";
 import {Like} from "../../common/components/badge/Like";
+import {Comment} from "../../common/components/badge/Comment";
 import {Like as LikeState, Read as ReadState} from 'common/api/impl/domain'
 import useSWR from "swr";
 import {useCallback} from "react";
@@ -21,6 +22,7 @@ export const ArticleHead = (props: Props) => {
       <div className={'space-x-2'}>
         <ReadButton articleId={articleId}/>
         <LikeButton articleId={articleId}/>
+        <CommentButton/>
       </div>
     </div>
   )
@@ -54,5 +56,12 @@ const ReadButton = ({articleId}: { articleId: string }) => {
     <Read total={read.data?.total || 0}
           loading={read.data === undefined}
     />
+  )
+}
+
+const CommentButton = () => {
+  return (
+    <Comment onGotoComment={() =>
+      document.getElementById('comment')?.scrollIntoView()}/>
   )
 }

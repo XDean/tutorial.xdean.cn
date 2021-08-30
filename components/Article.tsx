@@ -40,7 +40,9 @@ export const Article = (props: Props) => {
         </Link>}
       </div>
       <hr/>
-      <GithubComment/>
+      <div id={'comment'}>
+        <GithubComment/>
+      </div>
     </div>
   )
 }
