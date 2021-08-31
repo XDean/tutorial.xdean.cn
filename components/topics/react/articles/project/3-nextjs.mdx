@@ -5,4 +5,189 @@ export const meta = {
 
 上一节介绍了React Create App，它是由官方提供的React项目创建工具。
 
-而本节要介绍的Next.JS在此之上更进一步，是一个轻量级的React框架。
+而本节要介绍的Next.JS在此之上更进一步，是一个轻量级的React应用框架。
+本教程网站就是构建在Next之上。
+
+Next已经在生产中被大量应用，真实案例包括Tiktok, Twitch, Hulu, Nike等等。更多可以参看[Next Showcase][showcase]。
+
+## 创建项目
+
+与Create React App类似，我们只需要几条命令就可以创建并运行Next应用。
+
+```bash
+$ npx create-next-app
+$ cd my-app
+$ npm run dev
+```
+
+## 特性
+
+NextJS作为一个应用框架，提供了非常丰富的支持，包括但不限于
+
+- 基于文件的页面路由
+- API路由
+- 混合SSG和SSR
+- 优化的Bundle拆分
+- 图片优化
+- 内置CSS支持
+- 快速刷新
+
+下面我会介绍最为重要的几个功能。
+
+### 基于文件的页面路由
+
+Next的路由建立在文件系统上，这使得路由非常直观。例如下面的文件路径。
+
+```treeview
+my-app/
+`-- pages/
+   |-- blog/
+   |   |-- posts/
+   |   |   `-- [id].jsx
+   |   `-- index.jsx/
+   |-- about.jsx
+   `-- index.jsx
+```
+
+所有在`pages/`文件夹下的`.jsx`文件都会被识别为页面并创建对应的路由，即
+
+- `/` => `pages/index.jsx`
+- `/about` => `pages/about.jsx`
+- `/blog` => `pages/blog/index.jsx`
+- `/blog/posts/post1` => `pages/blog/posts/[id].jsx`
+- `/blog/posts/post2` => `pages/blog/posts/[id].jsx`
+
+在每个页面文件中只需要导出页面组件，例如`About.jsx`
+
+```jsx
+const About = () => (
+  <div>
+    Hello World!
+  </div>
+)
+
+export default About
+```
+
+### API路由
+
+在上面的文件路由中，有一个特殊的`api`文件夹，其下的端点会被视为API而非页面。
+
+例如，你可以定义`pages/api/hello.js`，内容如下
+
+```js
+export default function handler(req, res) {
+  res.status(200).json({ message: 'Hello World'})
+}
+```
+
+现在访问`http://localhost:3000/api/hello`你就能看到响应的JSON内容了。
+
+API路由赋予了Next构建后端的能力，例如本教程网站的阅读量和点赞功能都是通过Next API路由实现的，而不需要部署额外的后端。
+
+### SSR和SSG
+
+- SSR全称Server Side Render，服务端渲染，即在运行时在服务端渲染网页
+- SSG全称Server Side Generate 服务端生成，即在构建时服务端生成静态网页
+
+如果你更早一些时候接触网页开发，在21世纪第一个十年，曾经是SSR的天下，代表技术有ASP,JSP等。
+随着技术进步，动态页面逐渐取代静态页面，前后端逐渐分离，前端获取JS代码在客户端进行渲染。
+但是有两个缺点是客户端渲染无法避免的，即首屏渲染速度和SEO(搜索引擎优化)，而这两点都是对于商业应用非常重要的特性。
+
+为了解决这个问题，Next提供了混合的渲染模式，同时具备了服务端渲染和客户端渲染的优势。
+
+对于静态页面，SSR是默认开启的，不需要任何配置。
+你可以对比Create React App生成的网页源代码和Next生成的网页源代码，前者的HTML没有任何内容，而后者HTML中已经包含了首屏页面。
+
+对于动态内容，可以在页面中定义如何获取数据，从而实现SSR或是SSG
+
+#### SSG `getStaticProps`
+
+在page文件中，我们可以导出一个名为`getStaticProps`的方法，它会在构建时执行以获取数据，结果会用作组件的props输入。
+
+例如，我们的博客文章列表存储在远程CMS上，代码如下：
+
+```jsx
+function Blog({ posts }) {
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+
+export default Blog
+
+export async function getStaticProps() {
+  const res = await fetch('https://.../posts')
+  const posts = await res.json()
+  return {
+    props: {
+      posts,
+    },
+  }
+}
+```
+
+#### SSR `getServerSideProps`
+
+上面的例子中，页面总是在构建时生成，即SSG。
+如果想要在请求时生成(SSR)，则可以导出一个名为`getServerSideProps`的方法，它会在请求时执行。
+上面的例子只需要更改方法名即可。
+
+### 图片优化
+
+Next提供了`next/image`组件作为`<img>`标签的扩展。
+它会根据浏览器版本和尺寸自动优化图像大小和格式，同时还会延迟加载，提高用户体验。
+
+使用起来十分简单，直接导入组件和图片即可。
+
+```jsx
+import Image from 'next/image'
+import profilePic from '../public/me.png'
+
+function Home() {
+  return (
+    <>
+      <h1>My Homepage</h1>
+      <Image
+        src={profilePic}
+        alt="Picture of the author"
+      />
+      <p>Welcome to my homepage!</p>
+    </>
+  )
+}
+```
+
+## 部署
+
+Next的部署需要Node环境，通过`npm run build`可以构建出生产资源，然后运行`npm run start`即可启动服务。
+
+然而Next的最佳部署方式并非手动部署，而是[Vercel][vercel]。
+
+Vercel是一个网页应用部署的云平台，对个人开发者免费。
+无论是Next还是Create React App应用都可以在Vercel上一键部署。
+同时一旦代码修改push到server就会自动重新部署，还支持多分支多实例。
+
+本教程网站就是在Vercel上部署的。可以说Vercel是个人开发者的不二选择。
+
+## Next.JS VS Create React App
+
+既然学习了两个React框架，两者之间的比较是不可避免的。
+当然，但凡是对比，其中就会有许多主观的成分。
+
+**于笔者而言，Next.JS总会是第一选择。**
+
+它开箱即用，功能丰富，是Create React App所不能比拟的。
+
+但是Next需要在服务端运行，这可能会对环境有所要求。如果你需要纯静态的网页，则Next不会是最好的选择。
+
+对于静态网站，还有一个非常流行的选择是[Gatsby][gatsby]。但是笔者没有过多接触，在这里不展开介绍。
+
+
+[showcase]: https://nextjs.org/showcase#all
+[gatsby]: https://www.gatsbyjs.org/
+[vercel]: https://vercel.com/
