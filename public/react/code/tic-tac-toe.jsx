@@ -12,6 +12,7 @@ const Board = ({squares, onClick}) => (
           const idx = 3 * row + col
           return (
             <Square
+              key={col}
               value={squares[idx]}
               onClick={() => onClick(idx)}
             />

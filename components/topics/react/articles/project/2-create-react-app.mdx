@@ -68,10 +68,6 @@ my-app
 `-- tsconfig.json
 ```
 
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
 - git仓库已经被初始化好，并提供了默认的`.gitignore`
 - npm的`package.json`已经配置好，其中包含了4个脚本
   - start，本地启动React应用
@@ -149,9 +145,32 @@ export default Header;
 生成的文件在`build`文件夹内，它们是完全静态的文件。
 你可以使用任何你喜欢的HTTP服务器来提供网页内容。
 
+## 更多
+
+Create React App还有更多其他功能，你可以仔细阅读[官方文档][doc]。
+
+### CRACO
+
+然而Create React App虽然便捷，但是由于封装性，当它的功能不能满足你的需求时，扩展其功能就有些困难了。
+
+为此，社区创建了[CRACO][craco]项目，即Create React App Configuration Override。
+它可以帮助你在不破坏封装性的前提下拓展配置（如webpack）。
+
+## 开始
+
+现在，你可以尝试使用Create React App来创建一个React项目并上手体验。
+
+下面是我给出的一个示例，在Create React App中创建了上一篇最后的井字棋小游戏。
+
+<iframe src="https://codesandbox.io/embed/create-react-app-tic-tac-toe-woi3h?fontsize=14&hidenavigation=1&theme=dark"
+        className={'w-full h-[500px] border-r !border-black overflow-hidden'}
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+/>;
 
 
 [doc]: https://create-react-app.dev/
 [github]: https://www.github.com/facebook/create-react-app
 [robots]: https://developer.mozilla.org/en-US/docs/Glossary/Robots.txt
 [manifset]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json
+[craco]: https://github.com/gsoft-inc/craco
