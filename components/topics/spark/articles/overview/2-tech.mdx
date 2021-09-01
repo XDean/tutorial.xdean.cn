@@ -1,9 +1,10 @@
-import Image from 'next/image'
+import Image from 'common/components/Image'
 import googleToHadoop from '../../../../../public/spark/resources/google_to_hadoop.png'
 import hadoopEcosystem from '../../../../../public/spark/resources/hadoop-ecosystem.webp'
 import sparkHomepage from '../../../../../public/spark/resources/spark-homepage.png'
 import flinkLogo from '../../../../../public/spark/resources/flink-logo.webp'
 import beamLogo from '../../../../../public/spark/resources/beam_logo.png'
+import trend from '../../../../../public/spark/resources/google-trend.png'
 
 export const meta = {
   id: 'progress',
@@ -190,8 +191,9 @@ Beam试图用一套统一的API来抽象数据处理的过程，下层适配各�
 
 可以说，Beam的前景并不明朗，但是考虑到Beam到今天才5岁，未来尚不可知。
 
+## 附： 2020 - 2010 分布式计算 Google Trend
 
-
+<Image src={trend} maxWidth={1200}/>
 
 ## Reference
 
