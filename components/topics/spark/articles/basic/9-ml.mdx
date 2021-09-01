@@ -1,0 +1,149 @@
+export const meta = {
+  id: 'ml',
+  name: 'ML机器学习',
+}
+
+MLLib是Spark官方提供的机器学习库，它使得在Spark上开发机器学习应用变得容易且易于拓展。（这里的机器学习不包括深度学习）
+
+MLLib库主要由以下及部分组成：
+
+1. 常见ML算法。包括分类/回归/聚类/协同过滤等。
+2. 特征化方法。包括特征提取/特征转化/降维/特征选择器/局部敏感哈希。
+3. 统计工具。包括统计信息/相关性分析/假设检验等。
+4. 管道Pipeline。用于构建、评估、调整机器学习管道的套件。
+5. 持久化。保存和读取算法/模型/管道。
+
+具体的用法可以参考[官方文档][doc]，这些API都十分简单易用。
+
+下面对几个典型算法给出示例：
+
+## 特征转换: 主成分分析 PCA
+
+```python
+from pyspark.ml.feature import PCA
+from pyspark.ml.linalg import Vectors
+
+data = [(Vectors.sparse(5, [(1, 1.0), (3, 7.0)]),),
+        (Vectors.dense([2.0, 0.0, 3.0, 4.0, 5.0]),),
+        (Vectors.dense([4.0, 0.0, 0.0, 6.0, 7.0]),)]
+df = spark.createDataFrame(data, ["features"])
+
+pca = PCA(k=3, inputCol="features", outputCol="pcaFeatures")
+model = pca.fit(df)
+
+result = model.transform(df).select("pcaFeatures")
+result.show(truncate=False)
+```
+
+```text
++-----------------------------------------------------------+
+|pcaFeatures                                                |
++-----------------------------------------------------------+
+|[1.6485728230883807,-4.013282700516296,-5.524543751369388] |
+|[-4.645104331781534,-1.1167972663619026,-5.524543751369387]|
+|[-6.428880535676489,-5.337951427775355,-5.524543751369389] |
++-----------------------------------------------------------+
+```
+
+## 分类：朴素贝叶斯 Native Bayes
+
+```python
+from pyspark.ml.classification import NaiveBayes
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+
+# Load training data
+data = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+
+# Split the data into train and test
+splits = data.randomSplit([0.6, 0.4], 1234)
+train = splits[0]
+test = splits[1]
+
+# create the trainer and set its parameters
+nb = NaiveBayes(smoothing=1.0, modelType="multinomial")
+
+# train the model
+model = nb.fit(train)
+
+# select example rows to display.
+predictions = model.transform(test)
+predictions.show()
+
+# compute accuracy on the test set
+evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction",
+                                              metricName="accuracy")
+accuracy = evaluator.evaluate(predictions)
+print("Test set accuracy = " + str(accuracy))
+```
+
+```text
++-----+--------------------+--------------------+-----------+----------+
+|label|            features|       rawPrediction|probability|prediction|
++-----+--------------------+--------------------+-----------+----------+
+|  0.0|(692,[95,96,97,12...|[-172664.79564650...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[98,99,100,1...|[-176279.15054306...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[122,123,124...|[-189600.55409526...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[124,125,126...|[-274673.88337431...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[124,125,126...|[-183393.03869049...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[125,126,127...|[-256992.48807619...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[126,127,128...|[-210411.53649773...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[127,128,129...|[-170627.63616681...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[127,128,129...|[-212157.96750469...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[127,128,129...|[-183253.80108550...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[128,129,130...|[-246528.93739632...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[150,151,152...|[-158348.34683571...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[152,153,154...|[-210229.50765957...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[152,153,154...|[-242985.16248889...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[152,153,154...|[-94622.933454005...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[153,154,155...|[-266465.39689814...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[153,154,155...|[-144989.71469229...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[154,155,156...|[-283834.57437738...|  [1.0,0.0]|       0.0|
+|  0.0|(692,[181,182,183...|[-155256.59399829...|  [1.0,0.0]|       0.0|
+|  1.0|(692,[100,101,102...|[-147726.11958982...|  [0.0,1.0]|       1.0|
++-----+--------------------+--------------------+-----------+----------+
+only showing top 20 rows
+
+Test set accuracy = 1.0
+```
+
+## 聚类： K-Means
+
+
+```python
+from pyspark.ml.clustering import KMeans
+
+dataset = spark.read.format("libsvm").load("sample_kmeans_data.txt")
+
+kmeans = KMeans().setK(2).setSeed(1)
+model = kmeans.fit(dataset)
+
+model.transform(dataset).show()
+
+print("Training Cost = " + str(model.summary.trainingCost))
+
+centers = model.clusterCenters()
+print("Cluster Centers: ")
+for center in centers:
+    print(center)
+```
+
+```text
++-----+--------------------+----------+
+|label|            features|prediction|
++-----+--------------------+----------+
+|  0.0|           (3,[],[])|         1|
+|  1.0|(3,[0,1,2],[0.1,0...|         1|
+|  2.0|(3,[0,1,2],[0.2,0...|         1|
+|  3.0|(3,[0,1,2],[9.0,9...|         0|
+|  4.0|(3,[0,1,2],[9.1,9...|         0|
+|  5.0|(3,[0,1,2],[9.2,9...|         0|
++-----+--------------------+----------+
+
+Training Cost = 0.11999999999994547
+
+Cluster Centers:
+[9.1 9.1 9.1]
+[0.1 0.1 0.1]
+```
+
+[doc]: http://spark.apache.org/docs/latest/ml-guide.html

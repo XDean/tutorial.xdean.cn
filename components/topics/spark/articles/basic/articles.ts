@@ -7,6 +7,8 @@ import A5, {meta as m5} from './5-rdd-cache.mdx'
 import A6, {meta as m6} from './6-df-basic.mdx'
 import A7, {meta as m7} from './7-df-op.mdx'
 import A8, {meta as m8} from './8-df-sql.mdx'
+import A9, {meta as m9} from './9-ml.mdx'
+import A10, {meta as m10} from './10-graph.mdx'
 
 import {ArticleData, ArticleSet} from "../../../topic";
 
@@ -20,6 +22,8 @@ export const BasicArticles: ArticleData[] = [
   {Component: A6, meta: m6},
   {Component: A7, meta: m7},
   {Component: A8, meta: m8},
+  {Component: A9, meta: m9},
+  {Component: A10, meta: m10},
 ]
 
 export const BasicArticleSet: ArticleSet = {
