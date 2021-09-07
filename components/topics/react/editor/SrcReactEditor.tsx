@@ -8,8 +8,14 @@ type Props = {
 } & Omit<ReactEditorProps, 'code'>
 
 export const SrcReactEditor = ({js, css, ...rest}: Props) => {
-  const jsCode = useSWR(js, fetchStatic);
-  const cssCode = useSWR(css || null, fetchStatic);
+  const jsCode = useSWR(js, fetchStatic, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+  const cssCode = useSWR(css || null, fetchStatic, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   return (
     <ReactEditor

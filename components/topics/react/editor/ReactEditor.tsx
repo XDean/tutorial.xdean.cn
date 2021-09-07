@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
-import {useDebounce} from "react-use";
 import {CodeEditor} from "./CodeEditor";
-import {ReactPreviewer} from "./ReactPreviewer";
+import {ReactPreview} from "./ReactPreview";
 import {Code} from "./type";
 import clsx from "clsx";
 import {Ace} from "ace-builds";
@@ -18,10 +17,8 @@ export const ReactEditor = (props: ReactEditorProps) => {
   const [refs, setRefs] = useState<Partial<Record<keyof Code, Ace.Editor>>>({})
   const [type, setType] = useState<keyof Code>('js')
   const [code, setCode] = useState(props.code)
-  const [previewCode, setPreviewCode] = useState(props.code)
   const [expand, setExpand] = useState(false)
   useEffect(() => setCode(props.code), [props.code])
-  useDebounce(() => setPreviewCode(code), 500, [code])
   useEffect(() => refs[type]?.resize(), [expand, type, refs])
 
   return (
@@ -60,7 +57,9 @@ export const ReactEditor = (props: ReactEditorProps) => {
           </div>
         ))}
       </div>
-      <ReactPreviewer code={previewCode} className={'h-0 md:h-auto md:w-0 flex-grow'}/>
+      <div className={'h-0 md:h-auto md:w-0 flex-grow p-2'}>
+        <ReactPreview code={code}/>
+      </div>
     </div>
   )
 }
