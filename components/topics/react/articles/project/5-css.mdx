@@ -1,0 +1,115 @@
+import Image from "common/components/Image";
+import scss from './resources/scss.png'
+
+export const meta = {
+  id: 'css',
+  name: 'CSS方案',
+}
+
+CSS作为网页的三大构件之一，在项目中是不可或缺的。
+在上一节的最后，笔者已经给出了自己的CSS答案，即TailwindCSS。
+
+对于CSS框架的发展以及为什么最终选择TailwindCSS，可以阅读下面两篇文章
+
+- [CSS功能类与关注点分离](https://tailwindchina.com/translations/css-utility-classes-and-separation-of-concerns.html)
+- [不合时宜的 CSS：Tailwind CSS 引发的思考](https://www.jianshu.com/p/69ede2218ed2)
+
+本节会对各种CSS方案进行简单介绍，但不再比较它们的优劣。
+
+## CSS预处理器
+
+CSS预处理框架是允许用户定义一种类似CSS的文件，编译时转换为CSS文件。
+一般这种语言中都有以下支持
+
+- 变量定义
+- 嵌套选择器
+- 混合(继承)
+
+流行的框架有SCSS(SASS), LESS, PostCSS等。下图展示了SCSS的变量和模块功能。
+
+<Image src={scss} maxWidth={900}/>
+
+## 语义化CSS Utilities
+
+语义化的宗旨是通过类名来表达功能(减少取名困难对脑细胞的损耗)。
+
+最为流行的语义化CSS框架莫过于Bootstrap和SemanticUI。
+
+在它们的加持之下，我们不需要直接接触CSS，转而直接使用预定义的语义化类。例如：
+
+```jsx
+<div className="ui three buttons">
+  <button className="ui active button">One</button>
+  <button className="ui button">Two</button>
+  <button className="ui button">Three</button>
+</div>
+```
+
+## CSS in JS
+
+CSS-in-JS框架的目的是将CSS语义转换为JS语义，通过组件化来抽象样式逻辑。
+一定程度上的，也是在反对关注点分离。
+
+流行的CSS-in-JS框架有styled-component, emotion。
+
+```jsx
+import styled, { css } from 'styled-components'
+
+const Button = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+
+  ${props =>
+    props.primary &&
+    css`
+      background: palevioletred;
+      color: white;
+    `};
+`
+```
+
+上一节讲到的Material-UI也提供了一个CSS-in-JS解决方案。
+
+## 实用优先CSS
+
+实用优先的CSS库不提供预构建的样式和组件，而是提供一组实用类帮助你创建自定义样式。
+这种CSS框架也会被乘坐功能优先CSS或者是原子CSS。
+
+流行的框架有TailwindCSS和Tachyons。
+
+Tailwind的示例如下
+
+```html
+<figure class="md:flex bg-gray-100 rounded-xl p-8 md:p-0">
+  <img class="w-32 h-32 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto" src="/sarah-dayan.jpg">
+  <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+    <blockquote>
+      <p class="text-lg font-semibold">
+        “Tailwind CSS is the only framework that I've seen scale
+        on large teams. It’s easy to customize, adapts to any design,
+        and the build size is tiny.”
+      </p>
+    </blockquote>
+    <figcaption class="font-medium">
+      <div class="text-cyan-600">
+        Sarah Dayan
+      </div>
+      <div class="text-gray-500">
+        Staff Engineer, Algolia
+      </div>
+    </figcaption>
+  </div>
+</figure>
+```
+
+乍一看这不过是把`style = display: flex`缩短到了`class = flex`，似乎有脱裤子放屁的嫌疑。
+
+但是仔细思考后你会发现这小小的改动的确解决了CSS的语义化问题。
+再到自己上手使用，你很快就会爱上它。
+
+另一方面，通过功能类名的组合和前缀，可以便捷地使用CSS伪类和响应式断点，例如`md:w-48`，`hover:shadow`。
+相比于前面任何一种方案都更为简洁。
