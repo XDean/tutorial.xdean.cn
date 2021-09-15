@@ -53,7 +53,7 @@ const LikeButton = ({articleId}: { articleId: string }) => {
 const ReadButton = ({articleId}: { articleId: string }) => {
   const read = useSWR<ReadState>(`/api/read?articleId=${articleId}`)
   return (
-    <Read total={read.data?.total || 0}
+    <Read total={<div title={`${read.data?.total}`}>{read.data?.unique_total}</div> || 0}
           loading={read.data === undefined}
     />
   )
