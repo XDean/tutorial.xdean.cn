@@ -6,7 +6,14 @@
 @tailwind utilities;
 
 @layer base {
-    button {
-        @apply border shadow rounded hover:bg-gray-100 hover:border-blue-300 p-1;
+    button:focus{
+        @apply outline-none
+    }
+}
+
+@layer components {
+    .btn {
+        @apply inline cursor-pointer border shadow rounded py-1 px-2 transition;
+        @apply hover:bg-gray-100 hover:border-blue-300;
     }
 }

@@ -31,9 +31,9 @@ export const Answer = () => {
   const [show, setShow] = useState(false)
   return (
     <>
-      <button onClick={() => setShow(e => !e)}>
+      <div className={'btn'} onClick={() => setShow(e => !e)}>
         {show ? '隐藏参考示例' : '显示参考示例'}
-      </button>
+      </div>
       <SrcReactEditor
         className={show ? '' : 'hidden'}
         js={'/react/code/tic-tac-toe.jsx'}

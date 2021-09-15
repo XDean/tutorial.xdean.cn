@@ -1,4 +1,237 @@
+import MuiButton from '@material-ui/core/Button';
+import AntButton from 'antd/lib/button'
+import BootButton from 'react-bootstrap/Button';
+import root from 'react-shadow';
+
 export const meta = {
   id: 'ui-lib',
   name: '组件库',
 }
+
+前面两节介绍了如何使用用两种工具搭建React工程，在这之后我们就要开始开发我们的组件了。
+
+但是从零开始创建每一个组件，实现通用逻辑还有调整它们的样式是非常繁琐的。
+所以我们或多或少地会用到第三方组件库。
+
+本节主要介绍几种流行的React组件库，并聊聊笔者对于它们的看法。
+
+## [Material UI](https://material-ui.com/)
+
+- Created: 2014
+- GitHub Star: [71K](https://github.com/mui-org/material-ui)
+- NPM Download:  [1.83M](https://www.npmjs.com/package/@material-ui/core)
+- Stackoverflow: [14K](https://stackoverflow.com/questions/tagged/material-ui)
+- Bundle Size: [93.7KB](https://bundlephobia.com/package/@material-ui/core@4.12.3)
+
+Material UI声称自己是"The world's most popular React UI Framework"。
+
+### 组件
+
+Material UI提供了超过50个组件。
+它们的设计遵循Google的Material Design风格，默认提供了阴影，动画，渐变等效果。
+
+下面是最简单的Button的例子，你可以试用观察它们的风格。
+
+<div className={'space-x-2'}>
+  <MuiButton variant="contained" color="primary">
+    Hello
+  </MuiButton>
+  <MuiButton variant="outlined" color="primary">
+    Hello
+  </MuiButton>
+  <MuiButton variant="text" color="primary">
+    Hello
+  </MuiButton>
+</div>
+
+### 样式
+
+Material UI提供了一套完整的CSS方案，可以进行主题定制，动态样式，响应式断点，暗色模式，且类型安全。
+
+下面展示了CSS-IN-JS
+
+```tsx
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: theme.color,
+    height: 48,
+    padding: '0 30px',
+  },
+}));
+
+export default function MyButton() {
+  const classes = useStyles();
+  return <Button className={classes.root}>Styled with Hook API</Button>;
+}
+```
+
+### 支持
+
+- 完全汉化的文档，拥有丰富的示例(含TS代码，可在线编辑)
+- 丰富的主题模板(免费和付费)
+- 活跃的社区(GitHub + Stackoverflow)
+- 官方付费支持
+
+## [Ant Design](https://ant.design/)
+
+- Created: 2015, Alibaba
+- GitHub Star: [74K](https://github.com/ant-design/ant-design)
+- NPM Download:  [766K](https://www.npmjs.com/package/antd)
+- Stackoverflow: [3.5K](https://stackoverflow.com/questions/tagged/antd)
+- Bundle Size: [344.2KB](https://bundlephobia.com/package/antd@4.16.13)
+
+Ant Design自称是世界第二流行的React UI库。主要用于企业级系统设计。
+
+### 组件
+
+Ant Design同样提供了50多个组件，其采用扁平式设计风格。
+
+下面依然是三个最简单的Button，你可以试用并和其它库对比。
+
+<root.div>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/antd@4.16.13/dist/antd.min.css"
+    integrity="sha256-z2+MGjDygAyzDIkan5mJJu18glU9YvV0fqVdbszPDp0="
+    crossOrigin="anonymous"
+  />
+  <AntButton type={'primary'} style={{marginRight: '0.5rem'}}>
+    Hello
+  </AntButton>
+  <AntButton style={{marginRight: '0.5rem'}}>
+    Hello
+  </AntButton>
+  <AntButton type={'text'}>
+    Hello
+  </AntButton>
+</root.div>
+
+### 样式
+
+Ant Design**没有**内置的自定义主题样式支持。
+其可以通过webpack配置更改默认的CSS变量以实现色彩和简单的样式变换。
+
+官方提供了三种默认主题，default/compact/dark。
+
+### 支持
+
+- 原生中文文档
+- 默认的国际化支持
+- 丰富的拓展(如AntD Mobile, AntD Sketch, AntV)
+- 开箱即用的企业应用模板(AntD Pro)
+- 没有付费支持
+
+## [React-Bootstrap](https://react-bootstrap.github.io/)
+
+- Created: 2013
+- GitHub Star: [19.9K](https://github.com/react-bootstrap/react-bootstrap)
+- NPM Download:  [702K](https://www.npmjs.com/package/react-bootstrap)
+- Stackoverflow: [3.2K](https://stackoverflow.com/questions/tagged/react-bootstrap)
+- Bundle Size: [36KB](https://bundlephobia.com/package/react-bootstrap@1.6.3)
+
+Bootstrap原本是Twitter开源的CSS框架，帮助开发响应式应用。
+React-Bootstrap是其在React上的集成。
+
+### 组件
+
+React-Bootstrap提供了约30个组件，其采用扁平化设计。
+
+下面是3个Button的示例：
+
+<root.div>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+    crossOrigin="anonymous"
+  />
+  <BootButton variant={'primary'} style={{marginRight: '0.5rem'}}>
+    Hello
+  </BootButton>
+  <BootButton variant={'outline-primary'} style={{marginRight: '0.5rem'}}>
+    Hello
+  </BootButton>
+  <BootButton variant={'light'}>
+    Hello
+  </BootButton>
+</root.div>
+
+### 样式
+
+React-Bootstrap**没有**自定义主题支持。
+
+自BootStrap5，可以通过SASS来定制色彩，例如暗色模式。
+
+### 支持
+
+- 没有中文文档，且文档较为简略
+- 社区支持较少，但是可以参考Bootstrap社区
+
+## 其他组件库
+
+除了上述三个流行的组件库，还有一些其他选择
+
+- [Blueprint](https://github.com/palantir/blueprint)，针对数据密集型的桌面应用设计，非常轻量级
+- [Chakra UI](https://github.com/chakra-ui/chakra-ui)，主打可访问、可重用、可组合
+- [Fluent UI Web](https://github.com/microsoft/fluentui)，微软开源，Windows(Office)风格
+
+## 我该用什么
+
+- Material UI
+  - 学习曲线较为陡峭
+  - 风格适用移动端，且支持响应式
+  - **适合多端应用，是一个非常普适的选择**
+- Ant Design
+  - 上手简单，默认特性丰富
+  - Bundle很大，可能导致用户体验下降
+  - **适合开发企业应用**
+- React Bootstrap
+  - 简单，轻量
+  - **适合小型应用**
+
+以上观点只是个人偏好，当然使用任何库都是可以解决各种问题的，区别只是effort的多少。
+
+### 笔者的选择
+
+介绍了这么多，对于笔者自己来说，我的选择是：
+
+**不使用组件库**
+
+组件库自然有它存在的价值，也确实能帮助到开发。
+但是，便捷的同时就意味着难以定制，例如改变某个组件的深层子组件的功能，也拿不到深层子组件的DOM元素(例如需要focus操作)。
+
+除了功能性，样式也是一大痛点。
+对于AntD和Bootstrap，它们都采用传统的全局CSS导入，这使得样式之间会相互影响。
+感兴趣的同学可以打开本篇文章的[源码](https://github.com/XDean/tutorial.xdean.cn/blob/main/components/topics/react/articles/project/4-ui-lib.mdx)，
+我是通过Shadow DOM的方式才解决了CSS的问题，从而把两个库的组件放在同一个页面里。
+
+即使是Material UI，采用了CSS-IN-JS的方式，也还是会有很多问题。
+例如深层样式定制困难，大量样式造成TS负载大，SSR导致不同步等等。
+Material UI虽然支持动态CSS、响应式断点等功能，但是使用起来很繁琐。
+
+```jsx
+const styles = theme => ({
+  root: {
+    padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.secondary.main,
+    },
+    [theme.breakpoints.up('md')]: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    [theme.breakpoints.up('lg')]: {
+      backgroundColor: green[500],
+    },
+  },
+});
+```
+
+对于笔者个人而言，我的首选的方案是TailwindCSS+自定义组件，在必要时按需使用少量外部组件。
+具体的内容会在后文CSS一节中讲到。

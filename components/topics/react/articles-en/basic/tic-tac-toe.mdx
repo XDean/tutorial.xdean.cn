@@ -28,9 +28,9 @@ export const Answer = () => {
   const [show, setShow] = useState(false)
   return (
     <>
-      <button onClick={() => setShow(e => !e)}>
+      <div className={'btn'} onClick={() => setShow(e => !e)}>
         {show ? 'Show Code' : 'Hide Code'}
-      </button>
+      </div>
       <SrcReactEditor
         className={show ? '' : 'hidden'}
         js={'/react/code/tic-tac-toe.jsx'}
