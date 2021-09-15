@@ -11,6 +11,7 @@ export type ReactEditorProps = {
   code: Code
   className?: string
   hideCode?: boolean
+  scope?: { [key: string]: any }
 }
 
 export const ReactEditor = (props: ReactEditorProps) => {
@@ -58,7 +59,7 @@ export const ReactEditor = (props: ReactEditorProps) => {
         ))}
       </div>
       <div className={'h-0 md:h-auto md:w-0 flex-grow p-2'}>
-        <ReactPreview code={code}/>
+        <ReactPreview code={code} scope={props.scope}/>
       </div>
     </div>
   )

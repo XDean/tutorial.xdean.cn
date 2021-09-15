@@ -2,3 +2,61 @@ export const meta = {
   id: 'other-lib',
   name: '其它实用库',
 }
+
+除了前面学到的内容之外，还有一些其它的第三方库可能会用到。
+下面进行一些简单的罗列，帮助你在必要时找到所需的库。
+
+## React-Router
+
+React前端路由工具库。
+
+一般在Create React App中使用，对于如NextJS等支持路由的框架，就不再需要React-Router。
+
+<iframe src="https://codesandbox.io/embed/react-router-basic-bnpsd?fontsize=14&hidenavigation=1&theme=dark"
+        className={'w-full h-[500px] border-r !border-black overflow-hidden'}
+        title="React Router - Basic"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+/>
+
+## Data Fetching
+
+帮助获取后台数据并提供缓存、数据状态和异步刷新等功能。
+
+- [SWR](https://github.com/vercel/swr)(笔者首选)
+- [React Query](https://github.com/tannerlinsley/react-query)
+
+```jsx
+import useSWR from 'swr'
+
+function Profile() {
+  const { data, error } = useSWR('/api/user', fetcher)
+
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+  return <div>hello {data.name}!</div>
+}
+```
+
+## 动画库
+
+- [React-spring](https://github.com/pmndrs/react-spring)
+- [React-motion](https://github.com/chenglou/react-motion)
+- [Framer-motion](https://github.com/framer/motion)
+
+## Hooks钩子工具库
+
+- [react-use](https://github.com/streamich/react-use)
+- [ahooks](https://github.com/alibaba/hooks)
+- [rooks](https://github.com/imbhargav5/rooks)
+
+## 测试相关
+
+- [storybook](https://github.com/storybookjs/storybook)
+- [jest](https://github.com/facebook/jest)
+- [json-server](https://github.com/typicode/json-server)
+
+## 大数据/无限列表渲染
+
+- [react-virtualized](https://github.com/bvaughn/react-virtualized)
+- [react-window](https://github.com/bvaughn/react-window)

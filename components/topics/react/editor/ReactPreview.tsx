@@ -4,14 +4,16 @@ import {IFrame} from "../../../util/IFrame";
 
 type Props = {
   code: Code
+  scope?: { [key: string]: any }
 }
 
 export const ReactPreview = (props: Props) => {
-  const {code} = props
+  const {code, scope} = props
   return (
     <IFrame className={'border-none w-full h-full'}>
       <LiveProvider code={code.js}
                     noInline
+                    scope={scope}
                     transformCode={code => code.replace('ReactDOM.render', 'render')}>
         <style>
           {code.css}

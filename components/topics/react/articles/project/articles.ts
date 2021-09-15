@@ -4,7 +4,7 @@ import A2, {meta as m2} from './2-create-react-app.mdx'
 import A3, {meta as m3} from './3-nextjs.mdx'
 import A4, {meta as m4} from './4-ui-lib.mdx'
 import A5, {meta as m5} from './5-css.mdx'
-import A6, {meta as m6} from './6-data-manage.mdx'
+import A6, {meta as m6} from './6-state-manage.mdx'
 import A7, {meta as m7} from './7-other-lib.mdx'
 import A8, {meta as m8} from './8-summary.mdx'
 import {ArticleData, ArticleSet} from "../../../topic";

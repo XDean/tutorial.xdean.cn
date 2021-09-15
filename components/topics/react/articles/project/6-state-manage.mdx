@@ -1,0 +1,84 @@
+import {SrcReactEditor} from "../../editor/SrcReactEditor";
+import {makeAutoObservable} from "mobx"
+import {observer} from "mobx-react"
+
+export const meta = {
+  id: 'state-manage',
+  name: '状态管理',
+}
+
+当应用的规模增长，我们将面对持续增长的状态。
+对状态的管理是否得当将直接影响到代码的可读性和可维护性。
+
+本节将介绍最流行的两个状态管理库Redux和MobX。
+
+## [Redux](https://github.com/reduxjs/redux)
+
+Redux是一个应用程序状态容器。是最流行的React状态管理库。
+
+它使用全局的状态对象来保存应用的所有状态和动作。这使得状态的变化可以预测。
+
+下面是一个典型的Redux示例，其创建并维护了一个`couter`状态。
+
+```js
+import { createSlice, configureStore } from '@reduxjs/toolkit'
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+    value: 0
+  },
+  reducers: {
+    incremented: state => {
+      state.value += 1
+    },
+    decremented: state => {
+      state.value -= 1
+    }
+  }
+})
+
+export const { incremented, decremented } = counterSlice.actions
+
+export const store = configureStore({
+  reducer: counterSlice.reducer
+})
+
+// Can still subscribe to the store
+store.subscribe(() => console.log(store.getState()))
+
+// Still pass action objects to `dispatch`, but they're created for us
+store.dispatch(incremented())
+// {value: 1}
+store.dispatch(incremented())
+// {value: 2}
+store.dispatch(decremented())
+// {value: 1}
+```
+
+### 你不需要Redux
+
+虽然Redux很流行，被很多应用采用，但是很可惜的是，你很可能不应该使用Redux。
+
+如你所见，Redux使得简单的状态变得异常繁琐。
+一个简单的状态，也许本就需要几行代码就能解决的问题，被Redux硬生生地拆成了三个部分。
+
+[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)是Medium上的一篇
+爆款文章，从最朴素的观点来表达为什么你不需要Redux。
+
+另一方面，Redux官方也在官网及ReadMe上注明了`Should You Use Redux?`和`Before Proceeding Further`。
+
+> 不要因为别人提起而采用Redux，你应该花时间来权衡利弊。
+
+更简单地总结，即，**当你不知道你是否应该使用Redux时，答案总是否定的**。
+
+## [Mobx](https://github.com/mobxjs/mobx)
+
+Mobx是一个简单的，自动化的，反应式的，可拓展的状态管理工具库。
+
+下面的例子展示了一个简单的例子，通过`makeAutoObservable`使得对象变成可观察的。
+
+<SrcReactEditor js={'/react/code/mobx.jsx'} scope={{
+  makeAutoObservable,
+  observer,
+}}/>
