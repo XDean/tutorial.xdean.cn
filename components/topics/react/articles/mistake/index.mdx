@@ -31,23 +31,33 @@ export const Mistake = ({js, children}) => {
 
 本篇收录各种React常见错误。
 
----
+## 更改`step`为10之后点击`add`，仍然只步进1
 
 <Mistake js={'func-dep'}>
 
-  - 问题： 更改`step`为10之后点击`add`，仍然只步进1
   - 原因：`useCallback`缺少依赖项
   - 解决：配置正确的依赖项
 
 </Mistake>
 
----
+## 点击`hide`后直接报错crash
 
 <Mistake js={'func-call-comp'}>
 
-  - 问题：点击`hide`后直接报错crash
   - 原因：使用函数调用渲染组件
   - 解决：使用尖括号渲染组件，其内部调用了React API，而非简单调用
+
+</Mistake>
+
+## 点击Click时，App Title会重复渲染
+
+<Mistake js={'context-value'}>
+
+  - 原因：context值每次渲染都会改变
+  - 解决：使用`useMemo`
+  - Tips
+      - React FC的调用本身并不会有性能损耗，但是通常会伴随着错误的effect，从而造成性能问题。
+      - 对于可变的Context，结合Mobx是一个不错的选择
 
 </Mistake>
 
