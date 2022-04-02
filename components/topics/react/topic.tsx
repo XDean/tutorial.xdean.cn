@@ -1,10 +1,11 @@
-import {Topic} from "../topic";
-import {BasicArticleSet} from "./articles/basic/articles";
-import {BasicArticleSetEN} from "./articles-en/basic/articles";
-import {ProjectArticleSet} from "./articles/project/articles";
-import {AdvancedArticleSet} from "./articles/advanced/articles";
-import {faReact} from "@fortawesome/free-brands-svg-icons";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faReact } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Topic } from '../topic';
+import { BasicArticleSetEN } from './articles-en/basic/articles';
+import { AdvancedArticleSet } from './articles/advanced/articles';
+import { BasicArticleSet } from './articles/basic/articles';
+import { MistakeArticleSet } from './articles/mistake';
+import { ProjectArticleSet } from './articles/project/articles';
 
 export const ReactTopic: Topic = {
   id: 'react',
@@ -20,13 +21,14 @@ export const ReactTopic: Topic = {
         BasicArticleSet,
         ProjectArticleSet,
         AdvancedArticleSet,
-      ]
+        MistakeArticleSet,
+      ],
     },
     {
       locale: 'en',
       sets: [
-        BasicArticleSetEN
-      ]
-    }
-  ]
-}
+        BasicArticleSetEN,
+      ],
+    },
+  ],
+};

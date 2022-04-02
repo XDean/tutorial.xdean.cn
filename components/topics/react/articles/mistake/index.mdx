@@ -1,0 +1,54 @@
+import { useState } from 'react';
+import { SrcReactEditor } from '../../editor/SrcReactEditor';
+
+export const meta = {
+  id: 'index',
+  name: 'React 错题集'
+}
+
+export const Mistake = ({js, children}) => {
+  const [showDetails, setShowDetails] = useState(false)
+  const [showAnswer, setShowAnswer] = useState(false)
+  return (
+    <div>
+      <SrcReactEditor js={`/react/code/mistake/${js}-${showAnswer ? 'answer' : 'raw'}.jsx`}/>
+      <div className={'flex flex-row items-center space-x-2'}>
+        <button onClick={() => setShowDetails(e => !e)}
+                className={'btn'}>
+          {showDetails ? '隐藏' : '显示'}分析
+        </button>
+        <button onClick={() => setShowAnswer(e => !e)}
+                className={'btn'}>
+          {showAnswer ? '隐藏' : '显示'}范例
+        </button>
+      </div>
+      <div className={showDetails ? 'block mt-2' : 'hidden'}>
+        {children}
+      </div>
+    </div>
+  )
+};
+
+本篇收录各种React常见错误。
+
+---
+
+<Mistake js={'func-dep'}>
+
+  - 问题： 更改`step`为10之后点击`add`，仍然只步进1
+  - 原因：`useCallback`缺少依赖项
+  - 解决：配置正确的依赖项
+
+</Mistake>
+
+---
+
+<Mistake js={'func-call-comp'}>
+
+  - 问题：点击`hide`后直接报错crash
+  - 原因：使用函数调用渲染组件
+  - 解决：使用尖括号渲染组件，其内部调用了React API，而非简单调用
+
+</Mistake>
+
+

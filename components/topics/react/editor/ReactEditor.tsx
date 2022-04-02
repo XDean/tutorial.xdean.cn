@@ -26,7 +26,7 @@ export const ReactEditor = (props: ReactEditorProps) => {
     <div className={clsx(
       'flex flex-col md:flex-row bg-white',
       expand ? "z-40 fixed left-0 top-0 w-full h-full" :
-        "w-full max-w-screen-xl h-[450px] md:h-[300px] my-2 mx-1 ring-1 ring-gray-500",
+        "w-full max-w-screen-xl h-[450px] md:h-[400px] my-2 mx-1 ring-1 ring-gray-500",
       props.className)}>
       <div className={clsx('h-[100px] md:h-auto md:w-0 flex-grow border-r flex-col flex', props.hideCode && 'hidden')}>
         <div className={'bg-black text-white text-lg flex flex-row items-center'}>
