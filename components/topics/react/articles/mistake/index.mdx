@@ -61,4 +61,19 @@ export const Mistake = ({js, children}) => {
 
 </Mistake>
 
+## async + effect
+
+- 我们在计数器上增加了远程同步功能 （setTimeout模拟网络API）
+- 但是，点击后发现，远程状态混乱，随机地出现同步地情况。
+
+<Mistake js={'promise-effect'}>
+
+  - 原因：`useEffect`中地异步调用没有被正确清理，导致前一次调用会覆盖后一次。
+  - 解决：在闭包中使用标记位，deconstructor中进行清理
+  - Tips
+      - 你可以把这一逻辑封装成自定义hook以减少冗余代码
+      - 对于`fetch`操作，可以结合`AbortSignal`从而实现真正的清理
+
+</Mistake>
+
 
