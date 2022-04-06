@@ -1,11 +1,9 @@
 module.exports = {
-  mode: 'jit',
-  purge: [
+  content: [
     './pages/**/*.{js,ts,jsx,tsx,md,mdx}',
     './components/**/*.{js,ts,jsx,tsx,md,mdx}',
     './common/**/*.{js,ts,jsx,tsx,md,mdx}',
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       animation: {
@@ -18,9 +16,6 @@ module.exports = {
         'react': '#61dafb',
       }
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [],
 }
