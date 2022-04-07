@@ -47,12 +47,16 @@ const Index: FC<Props> = (props) => {
   const article = articleSet?.articles.find(e => e.meta.id === props.id);
 
   if (!topic) {
-    router.replace('/');
+    if (router.isReady) {
+      router.replace('/');
+    }
     return null;
   }
 
   if (!localeArticleSets || !articleSet || !article) {
-    router.replace(`/article/${topic.id}`);
+    if (router.isReady) {
+      router.replace(`/article/${topic.id}`);
+    }
     return null;
   }
 
