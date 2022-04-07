@@ -1,11 +1,6 @@
 import Image from 'next/image'
 import mapReduce from '../../../../../public/spark/resources/mapreduce.png'
 
-export const meta = {
-  id: 'mapreduce',
-  name: 'MapReduce',
-}
-
 MapReduce是一种分布式计算模型，其实它的原理很简单，即所有计算都是Map和Reduce的组合。
 这一思想受到函数式编程常用的`map`和`reduce`操作启发。
 当然，MapReduce重要的并不是`map`和`reduce`函数本身，而是如何通过执行引擎分发任务以做到可扩展性和容错性。

@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { SrcReactEditor } from '../../editor/SrcReactEditor';
 
-export const meta = {
-  id: 'index',
-  name: 'React 错题集'
-}
-
 export const Mistake = ({js, children}) => {
   const [showDetails, setShowDetails] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)

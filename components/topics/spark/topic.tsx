@@ -1,6 +1,6 @@
 import {Topic} from "../topic";
-import {BasicArticleSet} from "./articles/basic/articles";
-import {OverviewArticleSet} from "./articles/overview/articles";
+import {BasicArticleSet} from "./articles/basic";
+import {OverviewArticleSet} from "./articles/overview";
 import sparkLogo from '../../../public/spark/spark.svg'
 import Image from 'next/image'
 

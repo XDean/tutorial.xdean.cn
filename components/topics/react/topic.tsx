@@ -1,11 +1,11 @@
 import { faReact } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Topic } from '../topic';
-import { BasicArticleSetEN } from './articles-en/basic/articles';
-import { AdvancedArticleSet } from './articles/advanced/articles';
-import { BasicArticleSet } from './articles/basic/articles';
+import { BasicArticleSetEN } from './articles-en/basic';
+import { AdvancedArticleSet } from './articles/advanced';
+import { BasicArticleSet } from './articles/basic';
 import { MistakeArticleSet } from './articles/mistake';
-import { ProjectArticleSet } from './articles/project/articles';
+import { ProjectArticleSet } from './articles/project';
 
 export const ReactTopic: Topic = {
   id: 'react',
