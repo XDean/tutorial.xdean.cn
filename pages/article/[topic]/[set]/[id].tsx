@@ -8,13 +8,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Article } from '../../../../components/Article';
 import { DefaultLayout } from '../../../../components/layout/DefaultLayout';
 import { TOC } from '../../../../components/TOC';
-import {
-  ArticleData,
-  ArticleLocale,
-  ArticleSet,
-  getLocaleArticleSets,
-  Topic,
-} from '../../../../components/topics/topic';
+import { getLocaleArticleSets } from '../../../../components/topics/topic';
 import { AllTopics } from '../../../../components/topics/topics';
 import { useLocale } from '../../../../components/util/hooks';
 import { useLocaleString } from '../../../../components/util/locale';
@@ -27,40 +21,12 @@ type Params = {
 
 type Props = Params
 
-const Index: FC<Props> = () => {
+const Index: FC<Props> = (props) => {
   const router = useRouter();
   const locale = useLocale();
   const localString = useLocaleString();
-  const [topic, setTopic] = useState<Topic>();
-  const [localArticleSets, setLocaleArticleSets] = useState<ArticleLocale>();
-  const [articleSet, setArticleSet] = useState<ArticleSet>();
-  const [article, setArticle] = useState<ArticleData>();
   const [openToc, setOpenToc] = useState(false);
   const articleContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
-    const {topic: topicId, set, id} = router.query;
-    const topic = AllTopics.find(e => e.id == topicId);
-    if (!topic) {
-      router.replace(`/`);
-      return;
-    }
-    const localeArticleSets = getLocaleArticleSets(topic, locale);
-    const articleSet = localeArticleSets.sets.find(e => e.id === set);
-    const article = articleSet?.articles.find(e => e.meta.id === id);
-
-    if (!!article) {
-      setTopic(topic);
-      setLocaleArticleSets(localeArticleSets);
-      setArticleSet(articleSet);
-      setArticle(article);
-    } else {
-      router.replace(`/article/${topic.id}`);
-    }
-  }, [router]);
 
   useEffect(() => {
     const handler = () => {
@@ -72,9 +38,21 @@ const Index: FC<Props> = () => {
     };
     Router.events.on('routeChangeComplete', handler);
     return () => Router.events.off('routeChangeComplete', handler);
-  }, [article]);
+  }, []);
 
-  if (!router.isReady || !topic || !localArticleSets || !articleSet || !article) {
+
+  const topic = AllTopics.find(e => e.id == props.topic);
+  const localeArticleSets = topic ? getLocaleArticleSets(topic, locale) : undefined;
+  const articleSet = localeArticleSets?.sets.find(e => e.id === props.set);
+  const article = articleSet?.articles.find(e => e.meta.id === props.id);
+
+  if (!topic) {
+    router.replace('/');
+    return null;
+  }
+
+  if (!localeArticleSets || !articleSet || !article) {
+    router.replace(`/article/${topic.id}`);
     return null;
   }
 
@@ -94,7 +72,7 @@ const Index: FC<Props> = () => {
           'max-w-2/12 h-full border-r p-1 mr-2 shadow-lg md:shadow overflow-auto bg-white transform transition absolute z-10 md:static',
           openToc ? 'left-0 top-0 translate-x-0' : '-translate-x-full md:translate-x-0',
         )}>
-          <TOC topic={topic} articleSet={articleSet} article={article} articleLocale={localArticleSets}/>
+          <TOC topic={topic} articleSet={articleSet} article={article} articleLocale={localeArticleSets}/>
         </div>
         <div className={'md:hidden absolute right-2 top-2 z-30 bg-white rounded-full p-1 ring-1 flex'}
              onClick={() => setOpenToc(o => !o)}
